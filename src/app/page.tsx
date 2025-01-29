@@ -24,10 +24,16 @@ const Page = () => {
       );
 
       console.log(response.data.results); 
+      console.log(response.data.results[0].backdrop_path); 
+
     } catch (err) {
       console.error("Error:", err);
     }
   };
+  // const photo = {response.data.results[0].backdrop_path};
+  const photo = () => {
+    response.data.results[0].backdrop_path
+  }
 
   useEffect(() => {
     getMovieData();
