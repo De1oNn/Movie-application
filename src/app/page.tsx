@@ -4,14 +4,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import * as React from "react"
-import { Card, CardContent } from "@/components/ui/card"
+// import { Card, CardContent } from "@/components/ui/carousel"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel" 
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
@@ -33,13 +33,17 @@ const Page = () => {
   const getMovieData = async () => {
     try {
       const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/popular?language=en-US&page=1`,
+        `${TMDB_BASE_URL}/movie/now_playing?language=en-US&page=1`,
         {
           headers: {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
           },
         }
       );
+      console.log("this is response");
+      
+      console.log(response);
+      
       setMovieList(response.data.results);
       console.log(response.data.results);
     } catch (err) {
@@ -57,23 +61,16 @@ const Page = () => {
 
   return (
     <div>
-      <Carousel className="w-full max-w-xs">
-      <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+        <Carousel className="h-[100px]">
+          <CarouselContent>
+            <CarouselItem>
+            </CarouselItem>
+            <CarouselItem>b</CarouselItem>
+            <CarouselItem>c</CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       {movieList.map((Movie) => (
         <div key={Movie.id} className="border p-4 rounded-lg mb-4 shadow-md">
           <img 
