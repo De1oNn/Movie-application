@@ -1,19 +1,18 @@
 "use client";
 
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation'
+
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
 
 const Page = () => {
-
+  const [movieList, setMovieList] = useState([])
 
   const getMovieData = async () => {
     try {
-      console.log("Running");
-
-      // console.log("API Token:", TMDB_API_TOKEN);
       const response = await axios.get(
         `${TMDB_BASE_URL}/movie/popular?language=en-US&page=1`,
         {
@@ -22,24 +21,36 @@ const Page = () => {
           },
         }
       );
-
-      console.log(response.data.results); 
-      console.log(response.data.results[0].backdrop_path); 
-
+      setMovieList(response.data) 
+      console.log(setMovieList); 
+      // // console.log(response.data.results[0].backdrop_path); 
     } catch (err) {
       console.error("Error:", err);
     }
   };
-  // const photo = {response.data.results[0].backdrop_path};
-  const photo = () => {
-    response.data.results[0].backdrop_path
-  }
-
   useEffect(() => {
+    console.log("called");
     getMovieData();
   }, []);
 
-  return <div>Movie Data</div>;
+
+  const router = useRouter()
+  const handleNavigate = () => {
+    router.push('/detail');
+  }
+  
+  
+  return (
+    <div>
+      <div>
+      </div>
+      <button onClick={handleNavigate}>
+        details
+      </button>
+    </div>
+  )
+
+
 };
 
 export default Page;

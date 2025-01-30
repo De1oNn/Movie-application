@@ -1,10 +1,9 @@
 import React from 'react'
 
-const Main = () => {
+export const Main = () => {
   return (
     <div className='h-screen'>
-        Main
+      Main
     </div>
   )
 }
-export default Main;

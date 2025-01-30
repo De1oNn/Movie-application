@@ -5,27 +5,27 @@ import { Phone } from 'lucide-react';
 
 export const Footer = () => {
   return (
-    <div className='w-[100%] h-[308px] py-[40px] px-[40px] bg-[red] flex justify-between flex-col'>
+    <div className='w-[100%] h-[308px] py-[40px] px-[40px] bg-[black] flex justify-between flex-col'>
         <div className='flex flex-col h-[55px] justify-between'>
-            <div className='flex w-[90px] justify-between'>
-                <Clapperboard />
+            <div className='flex w-[90px] justify-between text-[white]'>
+                <Clapperboard/>
                 <p>Movie N</p>
             </div>
-            <p>
+            <p className='text-[white]'>
             © 2024 Movie Z. All Rights Reserved.
             </p>
         </div>
         <div className='flex justify-between'>
             <div className='h-[161px] flex justify-between flex-col'>
                 <p>Contact Information</p>
-                <div className='flex justify-center items-center justify-between w-[200px]'>
+                <div className='flex justify-center items-center justify-between w-[200px] text-[white]'>
                     <Mail/>
                     <div>
                         <p>Email</p>
                         <p>support@movieN.com</p>
                     </div>
                 </div>
-                <div className='flex justify-center items-center justify-between w-[150px]'>
+                <div className='flex justify-center items-center justify-between w-[150px] text-[white]'>
                     <Phone />
                     <div>
                         <p>Phone</p>
@@ -33,7 +33,7 @@ export const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className='w-[25%] flex justify-between flex-col'>
+            <div className='w-[25%] flex justify-between flex-col text-[white]'>
                 <p className='font-semibold'>Follow us</p>
                 <p className='font-semibold'>Facebook</p>
                 <p className='font-semibold'>Instagram</p>
