@@ -60,7 +60,7 @@ const Page = () => {
   return (
     <div>
         {movieList.map((Movie) => (
-        <div key={Movie.id} className="flex flex-col items-start mb-4">
+        <div key={Movie.id} className="flex flex-col items-start mb-4 border-[2px] rounded">
           {Movie.backdrop_path && (
             <img
               src={`https://image.tmdb.org/t/p/original${Movie.backdrop_path}`}
