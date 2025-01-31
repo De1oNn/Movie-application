@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import * as React from "react"
 import { Star } from 'lucide-react'
 import { Play } from 'lucide-react'
+import { Users } from 'lucide-react';
 
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
@@ -22,6 +23,7 @@ const Page = () => {
     backdrop_path: string;
     poster_path: string;
     vote_average: number;
+    vote_count: number;
   };
   const [movieList, setMovieList] = useState<Movie[]>([]);
   const router = useRouter();
@@ -57,14 +59,13 @@ const Page = () => {
 
   return (
     <div>
-
         {movieList.map((Movie) => (
-        <div key={Movie.id} className="">
+        <div key={Movie.id} className="flex flex-col items-start mb-4">
           {Movie.backdrop_path && (
             <img
               src={`https://image.tmdb.org/t/p/original${Movie.backdrop_path}`}
               alt={Movie.title}
-              className="rounded-md h-[246px] w-[100%]"
+              className="rounded-md h-[246px] w-[100%] "
             />
           )}
           <div className="p-[20px] min-h-[220px] max-h-[380px] w-[100%]">
@@ -75,9 +76,15 @@ const Page = () => {
               </div>
               <div className="flex">
                 <div>
-                  <Star className="text-[yellow]" />
+                  <Star className="h-[20px] w-[20px] mr-[10px]" />
                 </div>
+                <div className="flex flex-col">
                 {Movie.vote_average}/10
+                  <span className="flex justify-center items-center">
+                  <Users className="h-[20px] w-[20px] mr-[10px]"/>
+                  {Movie.vote_count}
+                  </span>
+                </div>
               </div>
             </div>
             <p className="text-[14px] min-h-[100px] max-h=[300px] w-[350px]">{Movie.overview}</p>
@@ -90,7 +97,7 @@ const Page = () => {
           </div>
         </div>
       ))}
-      {movieList.map((Movie) => (
+      {/* {movieList.map((Movie) => (
         <div key={Movie.id} className="border p-4 rounded-lg mb-4 shadow-md">
           <img 
             src={`https://image.tmdb.org/t/p/original${Movie.poster_path}`} 
@@ -106,7 +113,7 @@ const Page = () => {
             />
           )}
         </div>
-      ))}
+      ))} */}
       <button onClick={handleNavigate} className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">
         View Details
       </button>
