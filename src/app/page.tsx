@@ -176,12 +176,12 @@ const Page = () => {
           <div className="w-[90%]">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Upcoming Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
             </div>
             {/* lg:grid grid-cols-5 gap-[5px] px-[50px] */}
-            <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:px-[50px] lg:w-[100%]">
+            <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:px-[50px] lg:w-[100%] ">
               {upcomingMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px]">
+                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -210,11 +210,11 @@ const Page = () => {
           <div className="w-[90%]">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Popular Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-30">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-30 cursor-pointer transition-transform hover:scale-[1.02] ">See more</button>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:px-[50px] lg:w-[100%]">
               {popularMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px]">
+                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -242,11 +242,11 @@ const Page = () => {
           <div className="w-[90%]">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Top Rated Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-30">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-30 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:px-[50px] lg:w-[100%]">
               {topRatedMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px]">
+                <div key={movie.id} className="flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
