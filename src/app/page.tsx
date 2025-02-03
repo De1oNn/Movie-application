@@ -116,7 +116,9 @@ const Page = () => {
           },
         }
       );
-      setTv(response.data.results); // Set the fetched TV shows to state
+      setTv(response.data.results); 
+      console.log(response.data.results);
+      
     } catch (err) {
       console.error("Error:", err);
     }
