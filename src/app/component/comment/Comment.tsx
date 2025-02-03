@@ -3,8 +3,8 @@ import { Plus } from 'lucide-react';
 
 export const Comment = () => {
     return (
-        <div className="min-h-[150px] w-[100%]  p-[20px] ">
-            <div className="h-[100%] w-[100%] rounded-[20px] border-[3px] p-[10px]">
+        <div className="min-h-[150px] w-[100%]  p-[20px] flex justify-center items-center">
+            <div className="h-[100%] w-[100%] lg:w-[1280px] rounded-[20px] border-[3px] p-[10px]">
                 <div>
                     <p className="text-[#064ba4] font-semibold">Comment</p>
                 </div>
