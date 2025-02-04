@@ -349,7 +349,7 @@ const Page = () => {
       )}
 
         <div className=" mt-6 flex justify-center items-center flex-col">
-          <div className="flex justify-between w-[100%] h-[36px]">
+          <div className="flex justify-between w-[90%] h-[36px]">
             <h1 className="font-semibold text-[24px] mb-4">Top Rated TV Shows</h1>
             <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
           </div>
