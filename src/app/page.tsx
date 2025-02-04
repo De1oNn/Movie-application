@@ -2,9 +2,8 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Star, Users, Play, ArrowRight , ArrowLeft, Calendar } from "lucide-react";
+import { Star, Users, Play, ArrowRight , ArrowLeft, Calendar, } from "lucide-react";
 import { useRouter } from "next/navigation";
-// import star from './icons/star (1).svg2'
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
@@ -33,7 +32,7 @@ const Page = () => {
   
   
 
-  const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]); // State for Now Playing
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]); 
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]); 
@@ -51,7 +50,7 @@ const Page = () => {
           },
         }
       );
-      setNowPlayingMovies(response.data.results); // Store now playing data
+      setNowPlayingMovies(response.data.results); 
       console.log(response.data.runtime);
       
     } catch (err) {
@@ -123,6 +122,7 @@ const Page = () => {
       console.error("Error:", err);
     }
   };
+  const { push } = useRouter();
 
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-[100%]">
-
+      {/* responsive deerh jijghen nuur */}
       {nowPlayingMovies.length > 0 && (
         <div
           className="flex flex-col items-start border-[2px] rounded p-4 cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md lg:hidden  "
@@ -207,19 +207,22 @@ const Page = () => {
           Next Movie
         </button>
       </div>
-      
+      {/* lg deerh tom nuur */}
       {nowPlayingMovies.length > 0 && (
         <div className="w-[100%]">
-          <img 
-            src={`https://image.tmdb.org/t/p/original${nowPlayingMovies[currentIndex].backdrop_path}`} 
-            alt={nowPlayingMovies[currentIndex].title} 
-            className="w-[100%] h-[800px] relative hidden lg:block "
-            />
+            <img 
+              src={`https://image.tmdb.org/t/p/original${nowPlayingMovies[currentIndex].backdrop_path}`} 
+              alt={nowPlayingMovies[currentIndex].title} 
+              className="w-[100%] h-[800px] relative hidden lg:block "
+              onClick={()=> push("/details/1")}
+              />
           <button className="absolute h-[32px] w-[32px] bg-[black] top-[35%] left-[5%] z-20 hidden lg:block lg:flex justify-center items-center text rounded-[100%] border-[2px] border">
-            <ArrowLeft  className="text-[white] h-[16px] w-[16px]"/>
+            <ArrowLeft  className="text-[white] h-[16px] w-[16px]"
+            onClick={()=> push("details/2")}/>
           </button>
           <button className="absolute h-[32px] w-[32px] bg-[black] top-[35%] left-[93%] z-20 hidden lg:block lg:flex justify-center items-center rounded-[100%] border-[2px] border">
-            <ArrowRight className="text-[white] h-[16px] w-[16px]"/>
+            <ArrowRight className="text-[white] h-[16px] w-[16px]"
+           />
           </button>
 
           <div className="hidden lg:block h-[250px] w-[325px] absolute top-[25%] left-[10%] text-[white]">
@@ -256,11 +259,13 @@ const Page = () => {
           <div className="w-[100%]">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Upcoming Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">
+                See more
+              </button>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
               {upcomingMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
+                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -271,11 +276,18 @@ const Page = () => {
                   <div className="w-[100%] p-[10px]">
                     <div className="px-[20px] flex mt-[5px] flex justify-start">
                       <span className="flex justify-center items-center">
-                        <Star className="h-[15px] w-[15px] mr-[5px] flex justify-center items-center text-[yellow]"/>
+                        <svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z" fill="#FDE047" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                       </span>
-                      <span className="text-[14px]">{upcomingMovies[currentIndex].vote_average}<span className="text-[12px]">/10</span></span>
+                      <span className="text-[14px] ml-[5px]">{upcomingMovies[currentIndex].vote_average}<span className="text-[12px]">/10</span></span>
                     </div>
-                    <h2 className="text-sm mt-2 text-center">{movie.title}</h2>
+                    <div className="">
+                      <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
+                      <div className="line-clamp-3 text-[14px] font-extralight">
+                        {nowPlayingMovies[currentIndex].overview}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -288,11 +300,11 @@ const Page = () => {
           <div className="w-[100%]">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Popular Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07]">See more</button>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
               {popularMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
+                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -303,11 +315,16 @@ const Page = () => {
                   <div className="w-[100%] p-[10px]">
                     <div className="px-[20px] flex mt-[5px] flex justify-start">
                       <span className="flex justify-center items-center">
-                        <Star className="h-[15px] w-[15px] mr-[5px] flex justify-center items-center text-[yellow]"/>
+                      <svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z" fill="#FDE047" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                       </span>
                       <span className="text-[14px]">{popularMovies[currentIndex].vote_average}<span className="text-[12px]">/10</span></span>
                     </div>
-                    <h2 className="text-sm mt-2 text-center">{movie.title}</h2>
+                    <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
+                    <div className="line-clamp-3 text-[14px] font-extralight">
+                        {nowPlayingMovies[currentIndex].overview}
+                      </div>
                   </div>
                 </div>
               ))}
@@ -320,11 +337,11 @@ const Page = () => {
           <div className="w-[100%] ">
             <div className="w-full flex justify-between items-center h-[36px]">
               <h1 className="text-[24px] font-semibold">Top Rated Movies</h1>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
+              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07]">See more</button>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
               {topRatedMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:w-[230px] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md">
+                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md">
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -335,11 +352,16 @@ const Page = () => {
                   <div className="w-[100%] p-[10px]">
                     <div className="px-[20px] flex mt-[5px] flex justify-start">
                       <span className="flex justify-center items-center">
-                        <Star className="h-[15px] w-[15px] mr-[5px] flex justify-center items-center text-[yellow]"/>
+                      <svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z" fill="#FDE047" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                       </span>
-                      <span className="text-[14px]">{topRatedMovies[currentIndex].vote_average}<span className="text-[12px]">/10</span></span>
+                      <span className="text-[14px] ml-[5px]">{topRatedMovies[currentIndex].vote_average}<span className="text-[12px]">/10</span></span>
                     </div>
-                    <h2 className="text-sm mt-2 text-center">{movie.title}</h2>
+                    <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
+                    <div className="line-clamp-3 text-[14px] font-extralight">
+                        {nowPlayingMovies[currentIndex].overview}
+                      </div>
                   </div>
                 </div>
               ))}
@@ -347,17 +369,17 @@ const Page = () => {
           </div>
         </div>
       )}
-
+        {/* top tv */}
         <div className=" mt-6 flex justify-center items-center flex-col">
           <div className="flex justify-between w-[100%] h-[36px]">
             <h1 className="font-semibold text-[24px] mb-4">Top Rated TV Shows</h1>
-            <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.02]">See more</button>
+            <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07]">See more</button>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[90%] lg:w-[100%]">
             {Tv.slice(0, 10).map((show) => (
               <div
                 key={show.id}
-                className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#c2c2d5] lg:h-[430px] cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md"
+                className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md"
               >
                 {show.poster_path && (
                   <img
@@ -369,14 +391,19 @@ const Page = () => {
                 <div className="w-[100%] p-[10px]">
                   <div className="px-[20px] flex mt-[5px] flex justify-start">
                     <span className="flex justify-center items-center">
-                      <Star className="h-[15px] w-[15px] mr-[5px] flex justify-center items-center text-[yellow]" />
+                    <svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z" fill="#FDE047" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                     </span>
-                    <span className="text-[14px]">
+                    <span className="text-[14px] ml-[5px]">
                       {show.vote_average}
                       <span className="text-[12px]">/10</span>
                     </span>
                   </div>
-                  <h2 className="text-sm mt-2 text-center">{show.name}</h2>
+                  <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{show.name}</h2>
+                  <div className="line-clamp-3 text-[14px] font-extralight">
+                        {nowPlayingMovies[currentIndex].overview}
+                    </div>
                 </div>
               </div>
             ))}
