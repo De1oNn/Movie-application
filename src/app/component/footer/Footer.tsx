@@ -5,7 +5,7 @@ import { Phone } from 'lucide-react';
 
 export const Footer = () => {
   return (
-    <div className='w-[100%] h-[308px] lg:py-[40px] lg:px-[40px] bg-[black] flex flex-col justify-center items-center '>
+    <div className='w-[100%] h-[308px] lg:py-[40px] lg:px-[40px] bg-[black] flex flex-col justify-center items-center'>
         <div className='lg:w-[1280px]'>
             <div className='flex flex-col h-[55px] justify-between'>
                 <div className='flex w-[90px] justify-between text-[white]'>
