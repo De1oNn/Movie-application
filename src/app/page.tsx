@@ -122,6 +122,7 @@ const Page = () => {
       console.error("Error:", err);
     }
   };
+
   const { push } = useRouter();
 
 
@@ -153,7 +154,7 @@ const Page = () => {
       {nowPlayingMovies.length > 0 && (
         <div
           className="flex flex-col items-start border-[2px] rounded p-4 cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md lg:hidden  "
-          // onClick={() => router.push(`/detail/${nowPlayingMovies[currentIndex].id}`)}
+          onClick={() => router.push(`/details/${nowPlayingMovies[currentIndex].id}`)}
         >
           {nowPlayingMovies[currentIndex].backdrop_path && (
             <img
@@ -214,7 +215,7 @@ const Page = () => {
               src={`https://image.tmdb.org/t/p/original${nowPlayingMovies[currentIndex].backdrop_path}`} 
               alt={nowPlayingMovies[currentIndex].title} 
               className="w-[100%] h-[800px] relative hidden lg:block "
-              onClick={()=> push("/details/1")}
+              onClick={() => router.push(`/details/${nowPlayingMovies[currentIndex].id}`)}
               />
           <button className="absolute h-[32px] w-[32px] bg-[black] top-[35%] left-[5%] z-20 hidden lg:block lg:flex justify-center items-center text rounded-[100%] border-[2px] border">
             <ArrowLeft  className="text-[white] h-[16px] w-[16px]"
@@ -285,7 +286,7 @@ const Page = () => {
                     <div className="">
                       <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
                       <div className="line-clamp-3 text-[14px] font-extralight">
-                        {nowPlayingMovies[currentIndex].overview}
+                        {upcomingMovies[currentIndex].overview}
                       </div>
                     </div>
                   </div>
@@ -323,7 +324,7 @@ const Page = () => {
                     </div>
                     <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
                     <div className="line-clamp-3 text-[14px] font-extralight">
-                        {nowPlayingMovies[currentIndex].overview}
+                        {popularMovies[currentIndex].overview}
                       </div>
                   </div>
                 </div>
@@ -360,7 +361,7 @@ const Page = () => {
                     </div>
                     <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{movie.title}</h2>
                     <div className="line-clamp-3 text-[14px] font-extralight">
-                        {nowPlayingMovies[currentIndex].overview}
+                        {topRatedMovies[currentIndex].overview}
                       </div>
                   </div>
                 </div>
@@ -402,7 +403,7 @@ const Page = () => {
                   </div>
                   <h2 className="text-sm mt-2 text-center text-[20px] mb-[8px] font-semibold">{show.name}</h2>
                   <div className="line-clamp-3 text-[14px] font-extralight">
-                        {nowPlayingMovies[currentIndex].overview}
+                        {/* {show[currentIndex].overview} */}
                     </div>
                 </div>
               </div>

@@ -1,22 +1,14 @@
-"use client";
+"Use Client"
 
 import React from 'react'
-import { useParams } from 'next/navigation';
+import { useParams } from 'next/navigation'
 
 const Page = () => {
   const params = useParams();
-
-
-
+  console.log(params);
+  
   return (
-    <div className='mx-[580px] h-full pt-[100px]'>
-      <div className='h-[100%] w-[100%] '>
-        <div>
-          hello {params.id}
-        </div>
-
-      </div>
-    </div>
+    <div>page</div>
   )
 }
-export default Page
+export default Page;
