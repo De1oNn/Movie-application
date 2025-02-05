@@ -3,20 +3,21 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Star, Users, Play, ArrowRight , ArrowLeft, Calendar, } from "lucide-react";
+import { Star, Users, Play, Calendar, } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card"
+import { CardContent } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
+// import { Skeleton } from "@/components/ui/skeleton"
 
-const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
+const TMDB_BASE_URL = process.env.TMDB_BASE_URL; 
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  // CarouselNext,
+  // CarouselPrevious,
 } from "@/components/ui/carousel"
 
 type TvShow = {
@@ -134,7 +135,7 @@ const response = await axios.get(
     }
   };
 
-  const { push } = useRouter();
+  // const { push }  = useRouter();
   // const router = useRouter();
 
 
@@ -172,7 +173,7 @@ const response = await axios.get(
       {nowPlayingMovies.length > 0 && (
         <div
           className="flex flex-col items-start border-[2px] rounded p-4 cursor-pointer transition-transform hover:scale-[1.02] hover:shadow-md lg:hidden  "
-          onClick={() => router.push(`/details/${nowPlayingMovies[currentIndex].id}`)}
+          // onClick={() => router.push(`/detailsm/${movie.id}`)}
         >
           {nowPlayingMovies[currentIndex].backdrop_path && (
             <img
@@ -227,6 +228,7 @@ const response = await axios.get(
       </div>
 
 <Carousel className="w-full hidden lg:block" plugins={[plugin.current]} >
+  {/* <Skeleton className="h-full h-[800px] rounded"/> */}
   <CarouselContent className="flex">
     {upcomingMovies.slice(0, 10).map((movie) => (
       <CarouselItem key={movie.id} className="h-[800px] w-full">
@@ -238,7 +240,7 @@ const response = await axios.get(
                   src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} 
                   alt={movie.title} 
                   className="w-full h-[800px] object-cover cursor-pointer"
-                  onClick={() => router.push(`/details/${movie.id}`)}
+                  onClick={() => router.push(`/detailsm/${movie.id}`)}
                 />
               ) : (
                 <div className="flex h-[800px] items-center justify-center bg-gray-800 text-white">
@@ -288,6 +290,7 @@ const response = await axios.get(
           <div
             key={movie.id}
             className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md"
+            onClick={() => router.push(`/detailsm/${movie.id}`)}
           >
             {movie.poster_path && (
               <img
@@ -348,7 +351,7 @@ const response = await axios.get(
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
               {popularMovies.slice(0, 10).map((movie) => (
                 <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md"
-                onClick={() => router.push(`/details/${movie.id}`)}
+                onClick={() => router.push(`/detailsm/${movie.id}`)}
                 >
                   {movie.poster_path && (
                     <img
@@ -386,7 +389,11 @@ const response = await axios.get(
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
               {topRatedMovies.slice(0, 10).map((movie) => (
-                <div key={movie.id} className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md">
+                <div 
+                  key={movie.id} 
+                  className="lg:w-[230px] flex flex-col items-center border rounded-md bg-[#b2b2b2] lg:w-[230px] lg:h-[530px] cursor-pointer transition-transform hover:scale-[1.07] hover:shadow-md"
+                  onClick={() => router.push(`/detailsm/${movie.id}`)}
+                  >
                   {movie.poster_path && (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -427,6 +434,7 @@ const response = await axios.get(
       <div
         key={show.id}
         className="lg:w-[230px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-700 relative overflow-hidden"
+        onClick={() => router.push(`/detailsm/${show.id}`)}
       >
         {show.poster_path && (
           <img
