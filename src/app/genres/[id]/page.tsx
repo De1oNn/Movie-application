@@ -17,6 +17,10 @@ type GenreType = {
 
 type Movie = {
   original_title: string;
+  overview: string;
+  backdrop_path: string;
+  vote_average: number;
+  poster_path: string;
 };
 
 const Page = () => {
@@ -105,27 +109,36 @@ const Page = () => {
             );
           })}
       </div>
-
+  
       <div className="w-[2px] h-[90%] bg-[black] m-[20px]" />
-
+  
       {/* Movies Display */}
       <div>
         {movies.length > 0 ? (
-          movies.map((item) => {
-            return (
-              <div 
-                key={item.original_title}
-              >
-              {item.original_title}
-              </div>
-              ) 
-          })
+          <>
+            <h2 className="text-xl font-semibold mb-4">Found {movies.length} movies:</h2>
+            <div className='grid grid-col-4 grid-row-5 w-[100%]'>
+              {movies.map((item) => (
+                <div key={item.original_title} className='w-[165px] h-[400px]'>
+                  <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="" className='h-[244px] w-[165px]'/>
+                  <div>
+                    <div>
+                      <span>{item.vote_average}</span><span>/10</span>
+                    </div>
+                    <h1 className=''>{item.original_title}</h1>
+                    <p className='line-clamp-3'>{item.overview}</p>
+                  </div>
+                  
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <div>No movies found for the selected genre.</div>
         )}
       </div>
     </div>
   );
-};
+};    
 
 export default Page;
