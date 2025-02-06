@@ -85,7 +85,7 @@ const Page = () => {
   };
 
   return (
-    <div className="px-[430px] h-screen flex">
+    <div className="px-[400px] flex">
       {/* Genre Sidebar */}
       <div className="w-[30%] h-[250px] gap-[5px] mt-[50px]">
         {genres.length > 0 &&
@@ -113,30 +113,55 @@ const Page = () => {
       <div className="w-[2px] h-[90%] bg-[black] m-[20px]" />
   
       {/* Movies Display */}
-      <div>
-        {movies.length > 0 ? (
-          <>
-            <h2 className="text-xl font-semibold mb-4">Found {movies.length} movies:</h2>
-            <div className='grid grid-col-4 grid-row-5 w-[100%]'>
-              {movies.map((item) => (
-                <div key={item.original_title} className='w-[165px] h-[400px]'>
-                  <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="" className='h-[244px] w-[165px]'/>
-                  <div>
-                    <div>
-                      <span>{item.vote_average}</span><span>/10</span>
-                    </div>
-                    <h1 className=''>{item.original_title}</h1>
-                    <p className='line-clamp-3'>{item.overview}</p>
-                  </div>
-                  
-                </div>
-              ))}
+      <div className="w-[100%]">
+  {movies.length > 0 ? (
+    <>
+      <h2 className="text-xl font-semibold mb-6">Found {movies.length} movies:</h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-[100%]">
+        {movies.map((item) => (
+          <div
+            key={item.original_title}
+            className="w-[165px] h-[400px] flex flex-col items-center border-2 border-transparent rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 cursor-pointer hover:shadow-lg hover:scale-[1.05] transition-transform overflow-hidden relative"
+          >
+            <img
+              src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
+              alt={item.original_title}
+              className="h-[244px] w-[100%] object-cover transition duration-500 ease-in-out transform hover:scale-110 rounded-t-lg"
+            />
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-40 hover:opacity-50"></div>
+            <div className="relative z-10 w-full p-4">
+              <div className="flex items-center justify-start gap-2">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z"
+                    fill="#FDE047"
+                    stroke="#FDE047"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="text-yellow-400 text-sm">{item.vote_average}</span>
+                <span className="text-white text-sm">/10</span>
+              </div>
+              <h1 className="mt-2 text-sm text-white font-semibold line-clamp-1">{item.original_title}</h1>
+              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{item.overview || "No overview available"}</p>
             </div>
-          </>
-        ) : (
-          <div>No movies found for the selected genre.</div>
-        )}
+          </div>
+        ))}
       </div>
+    </>
+  ) : (
+    <div className="text-gray-700 mt-4 text-center">
+      No movies found for the selected genre.
+    </div>
+  )}
+</div>
     </div>
   );
 };    
