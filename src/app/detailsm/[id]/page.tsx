@@ -106,9 +106,9 @@ const Page = () => {
   }, [id]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full lg:px-[580px]">
       {movie ? (
-        <div className="w-full px-10 md:px-20 lg:px-40 max-w-6xl">
+        <div className="w-full max-w-6xl">
           {/* Title and Rating Section */}
           <div className="flex w-full justify-between mt-8 mb-6">
             <div>
@@ -139,12 +139,12 @@ const Page = () => {
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
-              className="h-96 w-64 object-cover rounded-md shadow-md"
+              className="h-[428px] w-[288px] object-cover rounded-md shadow-md"
             />
             <img
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
-              className="h-96 w-full max-w-4xl object-cover rounded-md shadow-md"
+              className="h-[428px] w-[760px] max-w-4xl object-cover rounded-md shadow-md"
             />
           </div>
 
@@ -191,12 +191,17 @@ const Page = () => {
       {similarMovies.length > 0 ? (
   <div>
     <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4">More like this</h2>
-      <div className="grid grid-cols-5 md:grid-cols-5 gap-4">
+      <div className="flex justify-between justify-center mt-[40px]">
+        <h2 className="text-2xl font-semibold mb-4">More like this</h2>
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900 mt-[7px]">
+          See more
+        </button>
+      </div>
+      <div className="grid grid-cols-5 md:grid-cols-5 gap-9 ">
         {similarMovies.slice(0, 5).map((similarMovie) => (
           <div
             key={similarMovie.id}
-            className="border rounded-md p-4 hover:shadow-md w-[228px]"
+            className="border-[2px] rounded-[5px] hover:shadow-md w-[190px] h-[380px]"
             onClick={() => router.push(`/detailsm/${similarMovie.id}`)}
           >
             <img
@@ -204,12 +209,14 @@ const Page = () => {
               alt={similarMovie.title}
               className="w-full h-220 object-cover mb-2"
             />
-            <h3 className="text-lg font-semibold">
-              {similarMovie.title}
-            </h3>
-            <p className="text-sm text-gray-600">
-              Rating: {similarMovie.vote_average}
-            </p>
+            <div className="p-[10px]">
+              <h3 className="text-lg font-semibold">
+                {similarMovie.title}
+              </h3>
+              <p className="text-sm text-gray-600">
+                Rating: {similarMovie.vote_average}
+              </p>
+            </div>
           </div>
         ))}
       </div>
