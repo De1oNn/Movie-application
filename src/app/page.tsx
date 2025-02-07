@@ -276,12 +276,16 @@ const response = await axios.get(
 </Carousel>
 
       {/* Upcoming Movies Section */}
-      {upcomingMovies.length > 0 && (
+  {upcomingMovies.length > 0 && (
   <div className="flex mt-6 w-[90%] lg:w-[1280px]">
     <div className="w-[100%]">
       <div className="w-full flex justify-between items-center h-[36px]">
         <h1 className="text-[24px] font-semibold">Upcoming Movies</h1>
-        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]">See more</button>
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]"
+          onClick={() => router.push(`/category/upcomingMovies`)}
+        >
+          See more
+        </button>
       </div>
       <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[100%]">
         {upcomingMovies.slice(0, 10).map((movie) => (
@@ -322,7 +326,11 @@ const response = await axios.get(
     <div className="w-[100%]">
       <div className="w-full flex justify-between items-center h-[36px]">
         <h1 className="text-[24px] font-semibold">Popular Movies</h1>
-        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]">See more</button>
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]" 
+          onClick={() => router.push(`/category/popularMovies`)}
+          >
+          See more
+        </button>
       </div>
       <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[100%]">
         {popularMovies.slice(0, 10).map((movie) => (
@@ -363,7 +371,11 @@ const response = await axios.get(
     <div className="w-[100%]">
       <div className="w-full flex justify-between items-center h-[36px]">
         <h1 className="text-[24px] font-semibold">Top Rated Movies</h1>
-        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]">See more</button>
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]"
+          onClick={() => router.push(`/category/topRatedMovies`)}
+        >
+          See more
+        </button>
       </div>
       <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[100%]">
         {topRatedMovies.slice(0, 10).map((movie) => (

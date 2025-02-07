@@ -4,6 +4,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { Actor } from "next/font/google";
+import { StepForward } from 'lucide-react';
 
 const Page = () => {
   const params = useParams();
@@ -57,10 +59,79 @@ const Page = () => {
     video: boolean;
     director?: string;
   };
+  type movieCast = {
+    profile_path: string;
+  }
 
   const [movie, setMovie] = useState<Movie>();
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
   const router = useRouter();
+  const [movieCrew, setMovieCrew] = useState<any[]>([]);
+  const [movieCast, setMovieCast] = useState<any[]>([]); 
+  const [trailer, setTrailer] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);  // To control modal visibility
+
+  const getMovieTrailer = async () => {
+    try {
+      const response = await axios.get(
+        `${TMDB_BASE_URL}/movie/${id}/videos?language=en-US`,
+        {
+          headers: {
+            Authorization: `Bearer ${TMDB_API_TOKEN}`,
+          },
+        }
+      );
+
+      const trailerVideo = response.data.results.find((video: any) => video.type === "Trailer");
+
+      if (trailerVideo) {
+        setTrailer(trailerVideo.key);
+      } else {
+        console.log("No trailer found.");
+        setTrailer(null);
+      }
+    } catch (err) {
+      console.log("Error fetching trailer", err);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getMovieTrailer();
+    }
+  }, [id]);
+
+  // Toggle modal visibility
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+
+const getMovieCrews = async () => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/movie/${id}/credits?language=en-US`,
+      {
+        headers: {
+          Authorization: `Bearer ${TMDB_API_TOKEN}`,
+        },
+      }
+    );
+
+    setMovieCrew(response.data.crew);  // Set crew data (including director and writers)
+    setMovieCast(response.data.cast);  // Set cast data (actors/stars)
+
+    console.log("Crew:", response.data.crew);  // Check crew data
+    console.log("Cast:", response.data.cast);  // Check cast data
+
+  } catch (err) {
+    console.log("Error fetching movie credits", err);
+  }
+};
+
+useEffect(() => {
+  getMovieCrews(); // Fetch crew and cast data on component mount
+}, [id]);// `id` should be a valid movie ID
+  
 
   const getMovieData = async () => {
     try {
@@ -106,7 +177,51 @@ const Page = () => {
   }, [id]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full lg:px-[580px]">
+    <div className="flex flex-col items-center justify-center w-full lg:px-[580px] relative">
+      <div className="">
+        <button
+          onClick={openModal}
+          className="absolute bg-white text-black border rounded-full h-[40px] w-[40px] flex justify-center items-center top-[500px] right-[1280px] z-10"
+        >
+          <StepForward />
+        </button>
+
+        {/* Modal to show trailer */}
+        {isModalOpen && (
+          <>
+            {/* Dark Overlay */}
+            <div
+              className="fixed inset-0 bg-black opacity-60 z-10"
+              onClick={closeModal} // Close on overlay click
+            ></div>
+
+            {/* Trailer Modal */}
+            <div className="fixed inset-0 flex items-center justify-center z-20">
+              <div className="bg-white rounded-lg shadow-lg p-4 w-3/4 sm:w-1/2">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-[70px] right-[40px] text-white bg-black rounded-full h-[50px] w-[50px] p-1"
+                >
+                  X
+                </button>
+                {trailer ? (
+                  <iframe
+                    width="100%"
+                    height="550"
+                    src={`https://www.youtube.com/embed/${trailer}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="Movie Trailer"
+                  ></iframe>
+                ) : (
+                  <p>No trailer available</p>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
       {movie ? (
         <div className="w-full max-w-6xl">
           {/* Title and Rating Section */}
@@ -135,7 +250,7 @@ const Page = () => {
           </div>
 
           {/* Poster and Backdrop Images */}
-          <div className="flex justify-between flex-col md:flex-row mb-8 space-y-4 md:space-y-0">
+          <div className="flex justify-between flex-col md:flex-row mb-8 space-y-4 md:space-y-0 relative">
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
@@ -167,19 +282,48 @@ const Page = () => {
 
           {/* Director, Writers, and Stars Section */}
           <div className="mt-8 space-y-6">
+            {/* Director */}
             <div className="flex justify-between">
               <h3 className="text-lg font-medium">Director</h3>
-              <p>{movie.director || "N/A"}</p>
+              <p>
+                {
+                  movieCrew?.length > 0
+                    ? movieCrew.find((member) => member.job === "Director")?.name || "N/A"
+                    : "N/A"
+                }
+              </p>
             </div>
             <div className="h-px bg-gray-300" />
+
+            {/* Writers */}
             <div className="flex justify-between">
               <h3 className="text-lg font-medium">Writers</h3>
-              <p>Writer Names Here</p>
+              <p>
+                {
+                  movieCrew?.length > 0
+                    ? movieCrew
+                        .filter((member) => member.job === "Writer")
+                        .map((writer) => writer.name)
+                        .join(", ") || "N/A"
+                    : "N/A"
+                }
+              </p>
             </div>
             <div className="h-px bg-gray-300" />
+
+            {/* Stars (Actors) */}
             <div className="flex justify-between">
               <h3 className="text-lg font-medium">Stars</h3>
-              <p>Actor Names Here</p>
+              <p>
+                {
+                  movieCast?.length > 0
+                    ? movieCast
+                        .slice(0, 5)  
+                        .map((actor) => actor.name)
+                        .join(", ") || "N/A"
+                    : "N/A"
+                }
+              </p>
             </div>
           </div>
         </div>
@@ -193,7 +337,9 @@ const Page = () => {
     <div className="mt-8">
       <div className="flex justify-between mt-[40px] items-center">
         <h2 className="text-2xl font-semibold mb-4">More like this</h2>
-        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900">
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900"
+          onClick={() => router.push(`/category/moreLikeMovies`)}
+        >
           See more
         </button>
       </div>
@@ -201,7 +347,7 @@ const Page = () => {
         {similarMovies.slice(0, 5).map((similarMovie) => (
           <div
             key={similarMovie.id}
-            className="lg:w-[230px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
+            className="lg:w-[190px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
             onClick={() => router.push(`/detailsm/${similarMovie.id}`)}
           >
             {similarMovie.poster_path && (

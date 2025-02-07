@@ -24,6 +24,9 @@ type Movie = {
 };
 
 const Page = () => {
+
+  
+  const  router  = useRouter();
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const [genres, setGenres] = useState<GenreType[]>([]);
@@ -85,16 +88,16 @@ const Page = () => {
   };
 
   return (
-    <div className="px-[400px] flex">
+    <div className="px-[0px] lg:px-[500px] lg:flex ">
       {/* Genre Sidebar */}
-      <div className="w-[30%] h-[250px] gap-[5px] mt-[50px]">
+      <div className="w-[100%] lg:w-[40%] p-[20px] lg:p-[0px] flex flex-wrap h-[250px] gap-[5px] mt-[50px]">
         {genres.length > 0 &&
-          genres.map((item) => {
-            const genreId = item.id.toString();
+          genres.map((movie) => {
+            const genreId = movie.id.toString();
             const isSelected = selectedGenreIds.includes(genreId);
             return (
               <Badge
-                key={item.name}
+                key={movie.name}
                 onClick={() => handleGenreSelection(genreId)}
                 variant="outline"
                 className={`${
@@ -103,29 +106,37 @@ const Page = () => {
                     : ""
                 } rounded-full cursor-pointer`}
               >
-                {item.name}
+                {movie.name}
                 <ChevronRight className="h-[16px] w-[16px]" />
               </Badge>
             );
           })}
       </div>
   
-      <div className="w-[2px] h-[90%] bg-[black] m-[20px]" />
+      <div className="w-[2px] bg-[black] m-[20px] hidden lg:block" />
   
       {/* Movies Display */}
       <div className="w-[100%]">
   {movies.length > 0 ? (
     <>
-      <h2 className="text-xl font-semibold mb-6">Found {movies.length} movies:</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-[100%]">
-        {movies.map((item) => (
+      <div className='w-[100%] flex justify-between mt-[20px]'>
+        <h2 className="text-xl font-semibold mb-6">Found {movies.length} movies:</h2>
+        <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900"
+          onClick={() => router.push(`/category/moreLikeMovies`)}
+        >
+          See more
+        </button>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[100%]">
+        {movies.map((movie) => (
           <div
-            key={item.original_title}
-            className="w-[165px] h-[400px] flex flex-col items-center border-2 border-transparent rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 cursor-pointer hover:shadow-lg hover:scale-[1.05] transition-transform overflow-hidden relative"
+            key={movie.original_title}
+            className="w-[197px] h-[400px] flex flex-col items-center border-2 border-transparent rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 cursor-pointer hover:shadow-lg hover:scale-[1.05] transition-transform overflow-hidden relative"
+            onClick={() => router.push(`/detailsm/${movie.id}`)}
           >
             <img
-              src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
-              alt={item.original_title}
+              src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+              alt={movie.original_title}
               className="h-[244px] w-[100%] object-cover transition duration-500 ease-in-out transform hover:scale-110 rounded-t-lg"
             />
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-40 hover:opacity-50"></div>
@@ -146,11 +157,11 @@ const Page = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span className="text-yellow-400 text-sm">{item.vote_average}</span>
+                <span className="text-yellow-400 text-sm">{movie.vote_average}</span>
                 <span className="text-white text-sm">/10</span>
               </div>
-              <h1 className="mt-2 text-sm text-white font-semibold line-clamp-1">{item.original_title}</h1>
-              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{item.overview || "No overview available"}</p>
+              <h1 className="mt-2 text-sm text-white font-semibold line-clamp-1">{movie.original_title}</h1>
+              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{movie.overview || "No overview available"}</p>
             </div>
           </div>
         ))}
