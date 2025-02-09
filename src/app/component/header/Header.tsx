@@ -9,6 +9,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import {
   DropdownMenu,
@@ -109,7 +110,10 @@ export const Header = () => {
             <MoonStar className='h-[100%] w-[100%] text-[white] lg:h-[30px] lg:w-[30px]'/>
           </button>
           <button>
-            <CircleUserRound className='h-[24px] w-[24px] lg:h-[45px] lg:w-[45px] text-[white]'/>
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
           </button>
         </div>
       </div>

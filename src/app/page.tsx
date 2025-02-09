@@ -411,10 +411,11 @@ const response = await axios.get(
   </div>
 )}
         {/* top tv */}
-        <div className="mt-6 flex justify-center items-center flex-col">
+ <div className="mt-6 flex justify-center items-center flex-col">
   <div className="flex justify-between w-[100%] h-[36px]">
     <h1 className="font-semibold text-[24px] mb-4 text-gray-900">Top Rated TV Shows</h1>
-    <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900">
+    <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900"
+    onClick={() => router.push(`/category/tvShows`)}>
       See more
     </button>
   </div>

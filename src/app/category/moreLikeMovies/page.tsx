@@ -1,34 +1,32 @@
-"use client"
+'use client';
 
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
-import React from 'react'
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-
-const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
-const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
+const TMDB_BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
+const TMDB_API_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_TOKEN;
 
 type Movie = {
+  id: number;
   original_title: string;
   overview: string;
-  backdrop_path: string;
+  poster_path: string | null;
   vote_average: number;
-  poster_path: string;
 };
 
-const page = () => {
+const MoviesPage = () => {
   const { push } = useRouter();
-    const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectedGenreIds, setSelectedGenreIds] = useState<string[]>([]);
 
   const searchedGenresId = searchParams.get("genresId");
 
   const getMoviesByGenres = async (genreIds: string) => {
     try {
       const response = await axios.get(
-        `${TMDB_BASE_URL}/discover/movie?language=en&with_genres=${genreIds}&page=1`,
+        `${TMDB_BASE_URL}/discover/movie?language=en-US&with_genres=${genreIds}&page=1`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -38,47 +36,46 @@ const page = () => {
       );
       setMovies(response.data.results);
     } catch (error) {
-      console.log("Axios error:", error);
+      console.error("Error fetching movies:", error);
     }
   };
-    useEffect(() => {
-      if (searchedGenresId) {
-        getMoviesByGenres(searchedGenresId);
-      }
-    }, [searchedGenresId]);
+
+  useEffect(() => {
+    if (searchedGenresId && searchedGenresId.trim() !== "") {
+      const genreIdList = searchedGenresId.split(',');
+      setSelectedGenreIds(genreIdList);
+      getMoviesByGenres(searchedGenresId);
+    }
+  }, [searchedGenresId]);
 
   return (
-    <div className='px-[580px]'>
+    <div className="px-8 mt-10">
+      <h1 className="text-2xl font-semibold mb-4">
+        Found {movies.length} movies for your selected genres:
+      </h1>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {movies.length > 0 ? (
-          <>
-          <div className='w-[100%] flex justify-between'>
-              <h2 className="text-xl font-semibold mb-4">Found {movies.length} movies:</h2>
-              <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]"
-            onClick={() => push(`/category/moreLikeMovies`)}
-            >
-              See more
-            </button>
-          </div>
-            <div className='grid grid-col-4 grid-row-5 w-[100%]'>
-              {movies.map((item) => (
-                <div key={item.original_title} className='w-[165px] h-[400px]'>
-                  <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="" className='h-[244px] w-[165px]'/>
-                  <div>
-                    <div>
-                      <span>{item.vote_average}</span><span>/10</span>
-                    </div>
-                    <h1 className=''>{item.original_title}</h1>
-                    <p className='line-clamp-3'>{item.overview}</p>
-                  </div>
-                  
-                </div>
-              ))}
+          movies.map((movie) => (
+            <div key={movie.id} className="w-[165px]">
+              <img
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/original${movie.poster_path}` : '/placeholder.jpg'}
+                alt={movie.original_title || "No title available"}
+                className="h-[244px] w-[165px] object-cover"
+              />
+              <div>
+                <h1 className="text-lg font-semibold">{movie.original_title}</h1>
+                <p className="line-clamp-2">{movie.overview}</p>
+                <span>{movie.vote_average}/10</span>
+              </div>
             </div>
-          </>
+          ))
         ) : (
-          <div>No movies found for the selected genre.</div>
+          <div>No movies found for the selected genres.</div>
         )}
+      </div>
     </div>
-  )
-}
-export default page
+  );
+};
+
+export default MoviesPage;
