@@ -166,7 +166,7 @@ export const Header = () => {
 
       {/* Display search results below */}
       {searchResults.length > 0 && (
-        <div className="mt-4 px-[580px]">
+        <div className="mt-4 px-[580px] absolute top-[10%] z-10 ">
           <h3 className="text-xl font-semibold text-white">Search Results</h3>
           <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
             {searchResults.slice(0, 5).map((movie: any) => (
