@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Actor } from "next/font/google";
+// import { Actor } from "next/font/google";
 import { StepForward } from 'lucide-react';
 
 const Page = () => {
@@ -121,7 +121,6 @@ const getMovieCrews = async () => {
     setMovieCast(response.data.cast);  // Set cast data (actors/stars)
 
     console.log("Crew:", response.data.crew);  // Check crew data
-    console.log("Cast:", response.data.cast);  // Check cast data
 
   } catch (err) {
     console.log("Error fetching movie credits", err);
@@ -338,7 +337,7 @@ useEffect(() => {
       <div className="flex justify-between mt-[40px] items-center">
         <h2 className="text-2xl font-semibold mb-4">More like this</h2>
         <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900"
-          onClick={() => router.push(`/category/moreLikeMovies`)}
+         onClick={() => router.push(`/category/moreLikeMovies?genresId=${id}`)}
         >
           See more
         </button>

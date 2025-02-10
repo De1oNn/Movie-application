@@ -119,10 +119,10 @@ const Page = () => {
   {movies.length > 0 ? (
     <>
       <div className="w-full flex justify-between">
-        <h2 className="text-xl font-semibold mb-4">Found {movies.length} movies:</h2>
+        <h2 className="text-xl font-semibold mb-4">Found  movies:</h2>
         <button
           className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]"
-          onClick={() => push(`/category/moreLikeMovies`)}
+          onClick={() => push(`/category/genreMovie?genresId=${selectedGenreIds}`)}
         >
           See more
         </button>
@@ -131,7 +131,7 @@ const Page = () => {
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="lg:w-[160px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-700 relative overflow-hidden"
+            className=" flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-700 relative overflow-hidden"
             onClick={() => router.push(`/detailsm/${movie.id}`)}
           >
             {movie.poster_path && (
