@@ -118,8 +118,8 @@ const Page = () => {
       <div className="w-full">
   {movies.length > 0 ? (
     <>
-      <div className="w-full flex justify-between">
-        <h2 className="text-xl font-semibold mb-4">Found  movies:</h2>
+      <div className="w-full flex justify-between mt-[20px]">
+        <h2 className="text-[30px] font-semibold mb-4">Found  movies:</h2>
         <button
           className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer hover:scale-[1.07]"
           onClick={() => push(`/category/genreMovie?genresId=${selectedGenreIds}`)}

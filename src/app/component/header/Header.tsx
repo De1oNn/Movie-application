@@ -167,29 +167,31 @@ export const Header = () => {
       {/* Display search results below */}
       {searchResults.length > 0 && (
         <div className="mt-4 px-[580px] absolute top-[10%] z-10 ">
-          <h3 className="text-xl font-semibold text-white">Search Results</h3>
-          <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
-            {searchResults.slice(0, 5).map((movie: any) => (
-              <div
-                key={movie.id}
-                className="flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
-                onClick={() => router.push(`/detailsm/${movie.id}`)} // Navigate to movie details page
-              >
-                {movie.poster_path && (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.original_title}
-                    className="rounded-md w-full h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
-                  />
-                )}
-                <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
-                <div className="w-full p-[10px] relative z-10">
-                  <h2 className="text-lg mt-2 text-center text-white font-semibold">
-                    {movie.original_title}
-                  </h2>
+          <div className='p-[10px] border-[2px] rounded-[20px] backdrop-blur-lg'>
+            <h3 className="text-[30px] font-semibold text-white">Search Results</h3>
+            <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
+              {searchResults.slice(0, 5).map((movie: any) => (
+                <div
+                  key={movie.id}
+                  className="flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
+                  onClick={() => router.push(`/detailsm/${movie.id}`)} // Navigate to movie details page
+                >
+                  {movie.poster_path && (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt={movie.original_title}
+                      className="rounded-md w-full h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
+                    />
+                  )}
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
+                  <div className="w-full p-[10px] relative z-10">
+                    <h2 className="text-lg mt-2 text-center text-white font-semibold">
+                      {movie.original_title}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}

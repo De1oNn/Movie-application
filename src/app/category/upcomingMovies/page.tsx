@@ -4,10 +4,19 @@ import React from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL; 
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
-const page = () => {
+const Page = () => {
     type Movie = {
         id: number;
         title: string;
@@ -20,20 +29,23 @@ const page = () => {
       };
 
       const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+      const [currentPage, setCurrentPage] = useState<number>(1); // Track the current page
+        const [totalPages, setTotalPages] = useState<number>(1); 
 
       const router = useRouter();
 
-    const getUpcomingMovieData = async () => {
+    const getUpcomingMovieData = async (page: number) => {
         try {
           const response = await axios.get(
-            `${TMDB_BASE_URL}/movie/upcoming?language=en-US&page=1`,
+            `${TMDB_BASE_URL}/movie/upcoming?language=en-US&page=${page}`,
             {
               headers: {
                 Authorization: `Bearer ${TMDB_API_TOKEN}`,
               },
             }
           );
-          setUpcomingMovies(response.data.results); 
+          setUpcomingMovies(response.data.results);
+          setTotalPages(response.data.total_pages); 
           
         } catch (err) {
           console.error("Error:", err);
@@ -41,9 +53,33 @@ const page = () => {
       };
 
       useEffect(() => {
-        getUpcomingMovieData();
-      }, []);
-  return (
+        getUpcomingMovieData(currentPage);
+      }, [currentPage]);
+      
+      const getPaginationRange = () => {
+        const range: number[] = [];
+        const pageLimit = 5; // Number of pages to display at once
+    
+        // Handle pages before and after the current page
+        let startPage = Math.max(currentPage - 2, 1);
+        let endPage = Math.min(currentPage + 2, totalPages);
+    
+        // Make sure we always display 5 page buttons when possible
+        if (endPage - startPage < pageLimit - 1) {
+          if (startPage === 1) {
+            endPage = Math.min(startPage + 4, totalPages);
+          } else {
+            startPage = Math.max(endPage - 4, 1);
+          }
+        }
+    
+        for (let i = startPage; i <= endPage; i++) {
+          range.push(i);
+        }
+    
+        return range;
+      };
+    return (
     <div className='px-[580px]'>
         {upcomingMovies.length > 0 && (
   <div className="flex mt-6 w-[90%] lg:w-[1280px]">
@@ -84,8 +120,47 @@ const page = () => {
     </div>
   </div>
 )}
+<Pagination className="flex justify-end items-end mt-[20px]">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+            />
+          </PaginationItem>
+
+          {/* Show page numbers with ellipses */}
+          {getPaginationRange().map((page) => (
+            <PaginationItem key={page}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === page}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {/* Show ellipses if there are more pages */}
+          {totalPages > 5 && currentPage + 2 < totalPages && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() =>
+                setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
-  )
+    );
 }
 
-export default page
+export default Page
