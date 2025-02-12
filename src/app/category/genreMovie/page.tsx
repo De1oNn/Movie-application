@@ -3,6 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
@@ -19,15 +28,17 @@ type Movie = {
 const Page = () => {
   const searchParams = useSearchParams();
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [currentPage, setCurrentPage] = useState<number>(1); // Track the current page
+  const [totalPages, setTotalPages] = useState<number>(1);// Loading state
 
   const searchedGenresId = searchParams.get("genresId");
 
-  const getMoviesByGenres = async (genreIds: string) => {
+  const getMoviesByGenres = async (genreIds: string, page: number) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${TMDB_BASE_URL}/discover/movie?language=en&with_genres=${genreIds}&page=1`,
+        `${TMDB_BASE_URL}/discover/movie?language=en&with_genres=${genreIds}&page=${page}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,22 +47,44 @@ const Page = () => {
         }
       );
       setMovies(response.data.results);
+      setTotalPages(response.data.total_pages); 
     } catch (error) {
       console.log("Axios error:", error);
     } finally {
-      setLoading(false); // Set loading to false when API request finishes
+      setLoading(false); 
     }
   };
 
   useEffect(() => {
     if (searchedGenresId) {
-      getMoviesByGenres(searchedGenresId); // Fetch movies when genre ID is available
+      getMoviesByGenres(searchedGenresId, currentPage); 
     }
-  }, [searchedGenresId]); // Trigger effect when genresId changes
+  }, [searchedGenresId, currentPage]);
 
   if (loading) {
-    return <p>Loading...</p>; // Show loading message while fetching data
+    return <p>Loading...</p>; 
   }
+  const getPaginationRange = () => {
+    const range: number[] = [];
+    const pageLimit = 5; 
+
+    let startPage = Math.max(currentPage - 2, 1);
+    let endPage = Math.min(currentPage + 2, totalPages);
+
+    if (endPage - startPage < pageLimit - 1) {
+      if (startPage === 1) {
+        endPage = Math.min(startPage + 4, totalPages);
+      } else {
+        startPage = Math.max(endPage - 4, 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+
+    return range;
+  };
 
   return (
     <div className='px-[580px]'>
@@ -60,7 +93,7 @@ const Page = () => {
       </div>
       <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
         {movies.length === 0 ? (
-          <p>No movies found for this genre.</p> // Handle case when no movies are returned
+          <p>No movies found for this genre.</p>
         ) : (
           movies.map((movie) => (
             <div
@@ -109,6 +142,43 @@ const Page = () => {
           ))
         )}
       </div>
+      <Pagination className="flex justify-end items-end mt-[20px]">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                  />
+                </PaginationItem>
+      
+                {getPaginationRange().map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href="#"
+                      isActive={currentPage === page}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+      
+                {totalPages > 5 && currentPage + 2 < totalPages && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+      
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={() =>
+                      setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
     </div>
   );
 };

@@ -4,32 +4,42 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
 
-type Movie = {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string;
-  vote_average: number;
-};
-
 const MoviesPage = () => {
+  type Movie = {
+    id: number;
+    title: string;
+    overview: string;
+    poster_path: string;
+    vote_average: number;
+  };
   const router = useRouter();
   const searchParams = useSearchParams();
   const genresId = searchParams.get("genresId");
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Add a loading state
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [currentPage, setCurrentPage] = useState<number>(1); // Track the current page
+  const [totalPages, setTotalPages] = useState<number>(1); // Add a loading state
 
   // Function to fetch movies based on genre (similar movies)
-  const getSimilarMoviesByGenre = async () => {
+  const getSimilarMoviesByGenre = async (page: number) => {
     try {
       setLoading(true); // Set loading to true when API request starts
       const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/${genresId}/similar?language=en-US&page=1`, // Example: Action genre (ID: 28)
+        `${TMDB_BASE_URL}/movie/${genresId}/similar?language=en-US&page=${page}`, // Example: Action genre (ID: 28)
         {
           headers: {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
@@ -37,7 +47,8 @@ const MoviesPage = () => {
         }
       );
       console.log("API Response:", response.data); // Log the API response to inspect its structure
-      setSimilarMovies(response.data.results); // Set the response data to state
+      setSimilarMovies(response.data.results);
+      setTotalPages(response.data.total_pages); // Set the response data to state
     } catch (err) {
       console.error("Error fetching movies:", err);
     } finally {
@@ -47,12 +58,35 @@ const MoviesPage = () => {
 
   // Fetch similar movies by genre on component mount
   useEffect(() => {
-    getSimilarMoviesByGenre();
-  }, []); // Empty dependency array means this runs only once when the component mounts
+    getSimilarMoviesByGenre(currentPage);
+  }, [currentPage]); // Empty dependency array means this runs only once when the component mounts
 
   if (loading) {
     return <p>Loading...</p>; // Show loading message while data is being fetched
   }
+  const getPaginationRange = () => {
+    const range: number[] = [];
+    const pageLimit = 5; // Number of pages to display at once
+
+    // Handle pages before and after the current page
+    let startPage = Math.max(currentPage - 2, 1);
+    let endPage = Math.min(currentPage + 2, totalPages);
+
+    // Make sure we always display 5 page buttons when possible
+    if (endPage - startPage < pageLimit - 1) {
+      if (startPage === 1) {
+        endPage = Math.min(startPage + 4, totalPages);
+      } else {
+        startPage = Math.max(endPage - 4, 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+
+    return range;
+  };
 
   return (
     <div className='px-[580px]'>
@@ -96,6 +130,45 @@ const MoviesPage = () => {
         ))
       )}
     </div>
+    <Pagination className="flex justify-end items-end mt-[20px]">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                />
+              </PaginationItem>
+    
+              {/* Show page numbers with ellipses */}
+              {getPaginationRange().map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#"
+                    isActive={currentPage === page}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+    
+              {/* Show ellipses if there are more pages */}
+              {totalPages > 5 && currentPage + 2 < totalPages && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+    
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={() =>
+                    setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
     </div>
   );
 };
