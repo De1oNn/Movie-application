@@ -66,7 +66,7 @@ const MoviesPage = () => {
   }
   const getPaginationRange = () => {
     const range: number[] = [];
-    const pageLimit = 5; // Number of pages to display at once
+    const pageLimit = 2;
 
     // Handle pages before and after the current page
     let startPage = Math.max(currentPage - 2, 1);
@@ -89,7 +89,7 @@ const MoviesPage = () => {
   };
 
   return (
-    <div className='px-[580px]'>
+    <div className='p-[32px] lg:px-[580px]'>
       <div className='my-[20px]'>
         <h1 className='text-[40px] font-semibold'>More like this</h1>
       </div>
@@ -130,7 +130,7 @@ const MoviesPage = () => {
         ))
       )}
     </div>
-    <Pagination className="flex justify-end items-end mt-[20px]">
+    <Pagination className="flex justify-end items-end mt-[20px] px-[32px] lg:p-[0px]">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious

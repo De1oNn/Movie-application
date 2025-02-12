@@ -7,7 +7,6 @@ import TopRatedMovie from "./component/topRatedMovie/TopRatedMovie";
 import PopularMovie from "./component/popularMovie/PopularMovie";
 import UpComingMovie from "./component/upComingMovie/UpComingMovie";
 import BigUpComingMovie from "./component/bigUpComingMovie/BigUpComingMovie";
-import ResponsiveSmall from "./component/responsiveSmall/ResponsiveSmall";
 
 const Page = () => {
   const router = useRouter();
@@ -16,7 +15,6 @@ const Page = () => {
   };
   return (
     <div className="flex flex-col items-center justify-center w-[100%] bg-gradient-to-r from-blue-400 via-teal-500 to-purple-600 rounded-lg shadow-lg">
-      <ResponsiveSmall></ResponsiveSmall>
       <BigUpComingMovie></BigUpComingMovie>
       <UpComingMovie></UpComingMovie>
       <PopularMovie></PopularMovie>

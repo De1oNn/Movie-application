@@ -334,7 +334,7 @@ useEffect(() => {
       {movie ? (
         <div className="w-full max-w-6xl">
           {/* Title and Rating Section */}
-          <div className="flex w-full justify-between mt-8 mb-6">
+          <div className="flex w-full justify-between mt-8 mb-6 px-[30px]">
             <div>
               <h1 className="text-4xl font-bold">{movie.title}</h1>
               <div className="flex space-x-4 mt-2">

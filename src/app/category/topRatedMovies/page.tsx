@@ -59,7 +59,7 @@ const Page = () => {
 
   const getPaginationRange = () => {
     const range: number[] = [];
-    const pageLimit = 5; // Number of pages to display at once
+    const pageLimit = 2; // Number of pages to display at once
 
     // Handle pages before and after the current page
     let startPage = Math.max(currentPage - 2, 1);
@@ -82,14 +82,14 @@ const Page = () => {
   };
 
   return (
-    <div className='px-[580px]'>
-{topRatedMovies.length > 0 && (
-  <div className="flex mt-6 w-[90%] lg:w-[1280px]">
+    <div className='px-[32px] lg:px-[580px]'>
+  {topRatedMovies.length > 0 && (
+  <div className="flex mt-6 w-[100%] lg:w-[1280px]">
     <div className="w-[100%]">
       <div className="w-full flex justify-between items-center h-[36px]">
         <h1 className="text-[24px] font-semibold">Top Rated Movies</h1>
       </div>
-      <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[100%]">
+      <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 lg:w-[100%]">
         {topRatedMovies.slice(0, 20).map((movie) => (
           <div
             key={movie.id}
@@ -122,7 +122,7 @@ const Page = () => {
     </div>
   </div>
 )}
-  <Pagination className="flex justify-end items-end mt-[20px]">
+     <Pagination className="flex justify-end items-end mt-[20px]">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
