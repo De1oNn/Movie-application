@@ -32,17 +32,15 @@ export const Header = () => {
   const [searchValue, setSearchValue] = useState<string>(''); // Track search query
   const [searchResults, setSearchResults] = useState<any[]>([]); // Store movie search results
 
-  // Handle home button click
+
   const handleHomeClick = () => {
     router.push('/');
   };
 
-  // Handle genre click
   const handleGenreClick = (genreId: number) => {
-    router.push(`/genres/${genreId}`); // Adjusted for genre-specific route
+    router.push(`/genres/${genreId}`); 
   };
 
-  // Fetch genre data from TMDB
   const getGenreData = async () => {
     try {
       const response = await axios.get(
@@ -59,12 +57,11 @@ export const Header = () => {
     }
   };
 
-  // Handle the input change
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value); // Update search value when input changes
+    setSearchValue(e.target.value);
   };
 
-  // Perform the search API call
+ 
   const performSearch = async () => {
     if (searchValue.trim()) {
       try {
@@ -76,25 +73,25 @@ export const Header = () => {
             },
           }
         );
-        setSearchResults(response.data.results); // Set the movie search results
+        setSearchResults(response.data.results); 
       } catch (error) {
         console.log("Error fetching search results:", error);
       }
     } else {
-      setSearchResults([]); // Clear results if search input is empty
+      setSearchResults([]); 
     }
   };
 
-  // Debounce the search input to reduce API calls
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       performSearch();
-    }, 500); // Wait 500ms after the user stops typing
+    }, 500); 
 
-    return () => clearTimeout(timer); // Clean up timer if searchValue changes
+    return () => clearTimeout(timer);
   }, [searchValue]);
 
-  // Fetch genre data when component mounts
+
   useEffect(() => {
     getGenreData();
   }, []);
@@ -102,19 +99,18 @@ export const Header = () => {
   return (
     <div className="w-full bg-[black] flex justify-center items-center flex-col">
       <div className="w-[100%] h-[50px] lg:h-[80px] lg:w-[57%] flex justify-center items-center justify-between lg:justify-around px-[10px] bg-[black] lg:bg-[transparent] backdrop-blur-sm lg:z-20 sticky">
-        {/* Left section with home and genre dropdown */}
-        <div className="h-[100%] w-[100px] flex justify-center items-center justify-around lg:w-[300px]">
+
+        <div className="h-[100%] w-[120px] flex justify-center items-center justify-around lg:w-[300px]">
           <button
             className="font-semibold text-sm text-[white] lg:text-[20px]"
             onClick={handleHomeClick}
           >
             Home
           </button>
-          {/* <button className="hidden lg:block text-[white] text-sm font-semibold lg:text-[20px]">Country</button> */}
           {genres.length > 0 && (
-            <DropdownMenu>
+          <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="p-[12px]">
+                <Button variant="outline" className="lg:p-[10px] h-[25px] lg:h-[50px] p-[0px]">
                   <ChevronDown />
                   Genre
                 </Button>
@@ -151,9 +147,9 @@ export const Header = () => {
         </div>
 
         {/* Right section with moon icon and user avatar */}
-        <div className="h-[36px] w-[60px] lg:w-[120px] flex justify-center items-center justify-between text-[black]">
-          <button className="border-[1px] rounded-[5px] border-[#05044b] h-[24px] w-[24px] lg:h-[30px] lg:w-[30px] flex justify-center items-center">
-            <MoonStar className="h-[100%] w-[100%] text-[white] lg:h-[30px] lg:w-[30px]" />
+        <div className="h-[36px] w-[80px] lg:w-[120px] flex justify-center items-center justify-between text-[black]">
+          <button className="border-[1px] rounded-[5px] border-[#05044b] h-[25px] w-[px] lg:h-[30px] lg:w-[30px] flex justify-center items-center">
+            <MoonStar className="h-[100%] w-[100%] text-[white] lg:h-[100%] lg:w-[100%]" />
           </button>
           <button>
             <Avatar>
@@ -166,9 +162,9 @@ export const Header = () => {
 
       {/* Display search results below */}
       {searchResults.length > 0 && (
-        <div className="mt-4 px-[580px] absolute top-[10%] z-10 ">
+        <div className="mt-4 px-[580px] absolute top-[10%] z-30 ">
           <div className='p-[10px] border-[2px] rounded-[20px] backdrop-blur-lg'>
-            <h3 className="text-[30px] font-semibold text-white">Search Results</h3>
+            <h3 className="text-[30px] font-semibold text-black">Search Results</h3>
             <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
               {searchResults.slice(0, 5).map((movie: any) => (
                 <div

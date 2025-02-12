@@ -45,9 +45,9 @@ const PopularMovie = () => {
               getPopularMovieData();
             }, []);
   return (
-    <div>
+    <div className='p-[32px]'>
         {popularMovies.length > 0 && (
-  <div className="flex mt-6 w-[90%] lg:w-[1280px]">
+  <div className="flex mt-6 w-[100%] lg:w-[1280px]">
     <div className="w-[100%]">
       <div className="w-full flex justify-between items-center h-[36px]">
         <h1 className="text-[24px] font-semibold">Popular Movies</h1>

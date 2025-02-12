@@ -63,7 +63,7 @@ const BigUpComingMovie = () => {
               )
   return (
     <div>
-        <Carousel className="w-full hidden lg:block" plugins={[plugin.current]} >
+        <Carousel className="w-full  lg:block" plugins={[plugin.current]} >
   {/* <Skeleton className="h-full h-[800px] rounded"/> */}
   <CarouselContent className="flex">
     {upcomingMovies.slice(0, 10).map((movie) => (

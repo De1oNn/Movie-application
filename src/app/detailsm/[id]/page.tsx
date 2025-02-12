@@ -222,7 +222,7 @@ useEffect(() => {
         )}
       </div>
       {movie ? (
-        <div className="w-full max-w-6xl">
+        <div className="w-full max-w-6xl hidden lg:block">
           {/* Title and Rating Section */}
           <div className="flex w-full justify-between mt-8 mb-6">
             <div>
@@ -249,21 +249,20 @@ useEffect(() => {
           </div>
 
           {/* Poster and Backdrop Images */}
-          <div className="flex justify-between flex-col md:flex-row mb-8 space-y-4 md:space-y-0 relative">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              className="h-[428px] w-[288px] object-cover rounded-md shadow-md"
-            />
-            <img
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-              alt={movie.title}
-              className="h-[428px] w-[760px] max-w-4xl object-cover rounded-md shadow-md"
-            />
+          <div className="flex justify-between mb-8 space-y-4 md:space-y-0 relative">
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="h-[150px] w-[100px] lg:h-[428px] lg:w-[288px] object-cover rounded-md shadow-md"
+              />
+              <img
+                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                alt={movie.title}
+                className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
+              />
           </div>
 
-          {/* Genre Tags */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="hidden lg:block flex flex-wrap gap-2 mb-6">
             {movie.genres.map((genre) => (
               <span
                 key={genre.id}
@@ -274,7 +273,6 @@ useEffect(() => {
             ))}
           </div>
 
-          {/* Overview Section */}
           <div className="mt-4">
             <p className="text-lg leading-relaxed text-gray-700">{movie.overview}</p>
           </div>
@@ -310,7 +308,6 @@ useEffect(() => {
             </div>
             <div className="h-px bg-gray-300" />
 
-            {/* Stars (Actors) */}
             <div className="flex justify-between">
               <h3 className="text-lg font-medium">Stars</h3>
               <p>
@@ -331,10 +328,120 @@ useEffect(() => {
           <p>Loading...</p>
         </div>
       )}
+      
+      {/* sm deer baih details iin style */}
+      <div className="block lg:hidden">
+      {movie ? (
+        <div className="w-full max-w-6xl">
+          {/* Title and Rating Section */}
+          <div className="flex w-full justify-between mt-8 mb-6">
+            <div>
+              <h1 className="text-4xl font-bold">{movie.title}</h1>
+              <div className="flex space-x-4 mt-2">
+                <p>{movie.release_date}</p>
+                <p>{movie.runtime} Minutes</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              <p className="text-sm">Rating</p>
+              <div className="flex items-center">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z" fill="#FDE047" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="ml-2">
+                  <p className="text-lg font-medium">
+                    {movie.vote_average} <span className="text-sm text-gray-500">/10</span>
+                  </p>
+                  <p className="text-sm text-gray-500">{movie.vote_count} votes</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <img
+                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                alt={movie.title}
+                className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
+              />
+
+          {/* Poster and Backdrop Images */}
+          <div className="flex p-[30px] justify-between">
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="h-[150px] w-[100px] lg:h-[428px] lg:w-[288px] object-cover rounded-md shadow-md"
+              />
+            <div className="flex flex-col w-[250px]">
+              <div className="flex flex-wrap gap-2 mb-6">
+                {movie.genres.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="text-sm border rounded-lg px-3 py-1 bg-gray-100 text-gray-800"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4">
+                <p className="text-lg leading-relaxed text-gray-700">{movie.overview}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6 p-[30px]">
+            {/* Director */}
+            <div className="flex justify-between">
+              <h3 className="text-lg font-medium">Director</h3>
+              <p>
+                {
+                  movieCrew?.length > 0
+                    ? movieCrew.find((member) => member.job === "Director")?.name || "N/A"
+                    : "N/A"
+                }
+              </p>
+            </div>
+            <div className="h-px bg-gray-300" />
+
+            {/* Writers */}
+            <div className="flex justify-between">
+              <h3 className="text-lg font-medium">Writers</h3>
+              <p>
+                {
+                  movieCrew?.length > 0
+                    ? movieCrew
+                        .filter((member) => member.job === "Writer")
+                        .map((writer) => writer.name)
+                        .join(", ") || "N/A"
+                    : "N/A"
+                }
+              </p>
+            </div>
+            <div className="h-px bg-gray-300" />
+
+            <div className="flex justify-between">
+              <h3 className="text-lg font-medium">Stars</h3>
+              <p>
+                {
+                  movieCast?.length > 0
+                    ? movieCast
+                        .slice(0, 5)  
+                        .map((actor) => actor.name)
+                        .join(", ") || "N/A"
+                    : "N/A"
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="h-screen flex justify-center items-center">
+          <p>Loading...</p>
+        </div>
+      )}
+      </div>
 {similarMovies.length > 0 ? (
-  <div>
-    <div className="mt-8">
-      <div className="flex justify-between mt-[40px] items-center">
+  <div className="p-[32px] lg:p-[0px]">
+    <div className="">
+      <div className="flex justify-between mt-[0px] lg:mt-[40px] items-center">
         <h2 className="text-2xl font-semibold mb-4">More like this</h2>
         <button className="h-full w-[120px] border-b-2 border-transparent hover:border-black transition duration-300 cursor-pointer transition-transform hover:scale-[1.07] text-gray-900"
          onClick={() => router.push(`/category/moreLikeMovies?genresId=${id}`)}
@@ -346,7 +453,7 @@ useEffect(() => {
         {similarMovies.slice(0, 5).map((similarMovie) => (
           <div
             key={similarMovie.id}
-            className="lg:w-[190px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
+            className="lg:w-[190px] flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
             onClick={() => router.push(`/detailsm/${similarMovie.id}`)}
           >
             {similarMovie.poster_path && (
