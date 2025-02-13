@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MoonStar } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { MoonStar } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Base URL and token for TMDB API
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
 
@@ -29,16 +28,15 @@ export const Header = () => {
 
   const router = useRouter();
   const [genres, setGenres] = useState<Genre[]>([]);
-  const [searchValue, setSearchValue] = useState<string>(''); // Track search query
+  const [searchValue, setSearchValue] = useState<string>(""); // Track search query
   const [searchResults, setSearchResults] = useState<any[]>([]); // Store movie search results
 
-
   const handleHomeClick = () => {
-    router.push('/');
+    router.push("/");
   };
 
   const handleGenreClick = (genreId: number) => {
-    router.push(`/genres/${genreId}`); 
+    router.push(`/genres/${genreId}`);
   };
 
   const getGenreData = async () => {
@@ -61,7 +59,6 @@ export const Header = () => {
     setSearchValue(e.target.value);
   };
 
- 
   const performSearch = async () => {
     if (searchValue.trim()) {
       try {
@@ -73,24 +70,22 @@ export const Header = () => {
             },
           }
         );
-        setSearchResults(response.data.results); 
+        setSearchResults(response.data.results);
       } catch (error) {
         console.log("Error fetching search results:", error);
       }
     } else {
-      setSearchResults([]); 
+      setSearchResults([]);
     }
   };
 
-  
   useEffect(() => {
     const timer = setTimeout(() => {
       performSearch();
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchValue]);
-
 
   useEffect(() => {
     getGenreData();
@@ -98,28 +93,37 @@ export const Header = () => {
 
   return (
     <div className="w-full bg-[black] flex justify-center items-center flex-col">
-      <div className="w-[100%] h-[50px] lg:h-[80px] lg:w-[57%] flex justify-center items-center justify-between lg:justify-around px-[10px] bg-[black] lg:bg-[transparent] backdrop-blur-sm lg:z-20 sticky">
-
-        <div className="h-[100%] w-[120px] flex justify-center items-center justify-around lg:w-[300px]">
+      <div className="w-[100%] h-[50px] px-[20px] lg:px-[0px] lg:h-[80px] lg:w-[57%] flex items-center justify-between bg-[black] lg:bg-[transparent] backdrop-blur-sm lg:z-20 sticky">
+        <div className="h-[100%] flex items-center justify-between lg:w-[300px]">
           <button
             className="font-semibold text-sm text-[white] lg:text-[20px]"
             onClick={handleHomeClick}
           >
             Home
           </button>
+        </div>
+
+        <div className="h-[36px] lg:h-[36px] w-[200px] lg:w-[410px] flex justify-center items-center gap-4">
           {genres.length > 0 && (
-          <DropdownMenu>
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="lg:p-[10px] h-[25px] lg:h-[50px] p-[0px]">
+                <Button
+                  variant="outline"
+                  className="lg:p-[10px] h-[25px] lg:h-[36px] p-[0px]"
+                >
                   <ChevronDown />
                   Genre
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="h-[330px] w-[570px] p-[20px]">
-                <DropdownMenuLabel className="text-2xl font-semibold p-[0px] pb-[5px]">Genres</DropdownMenuLabel>
-                <DropdownMenuLabel className="text[16px] font-normal p-[0px] pb-[5px]">See lists of movies by genre</DropdownMenuLabel>
+              <DropdownMenuContent className="lg:h-[330px] lg:w-[570px] p-[20px]">
+                <DropdownMenuLabel className="text-2xl font-semibold p-[0px] pb-[5px]">
+                  Genres
+                </DropdownMenuLabel>
+                <DropdownMenuLabel className="text[16px] font-normal p-[0px] pb-[5px]">
+                  See lists of movies by genre
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator className="mb-[10px]" />
-                <DropdownMenuGroup className="grid grid-rows-5 grid-cols-3 gap-3">
+                <DropdownMenuGroup className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                   {genres.map((genre) => (
                     <Badge
                       key={genre.id}
@@ -134,23 +138,14 @@ export const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-        </div>
-
-        {/* Search Input */}
-        <div className="h-[36px] lg:h-[36px] w-[200px] lg:w-[410px] flex justify-center items-center">
           <input
-            className="w-[100%] lg:w-[410px] rounded-[10px] pt-[4px] pb-[4px] pl-[20px] bg-[white] h-[100%]"
+            className="w-[100%] lg:w-[410px] rounded-[px] pt-[4px] pb-[4px] pl-[20px] bg-[white] h-[100%]"
             placeholder="Search movies"
-            value={searchValue} // Bind input value to state
-            onChange={handleSearchInputChange} // Update search value on input change
+            value={searchValue}
+            onChange={handleSearchInputChange}
           />
         </div>
-
-        {/* Right section with moon icon and user avatar */}
-        <div className="h-[36px] w-[80px] lg:w-[120px] flex justify-center items-center justify-between text-[black]">
-          <button className="border-[1px] rounded-[5px] border-[#05044b] h-[25px] w-[px] lg:h-[30px] lg:w-[30px] flex justify-center items-center">
-            <MoonStar className="h-[100%] w-[100%] text-[white] lg:h-[100%] lg:w-[100%]" />
-          </button>
+        <div className="h-[36px] flex justify-center items-center justify-between text-[black]">
           <button>
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
@@ -162,11 +157,13 @@ export const Header = () => {
 
       {/* Display search results below */}
       {searchResults.length > 0 && (
-        <div className="mt-4 px-[580px] absolute top-[10%] z-30 ">
-          <div className='p-[10px] border-[2px] rounded-[20px] backdrop-blur-lg'>
-            <h3 className="text-[30px] font-semibold text-black">Search Results</h3>
-            <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8">
-              {searchResults.slice(0, 5).map((movie: any) => (
+        <div className="mt-4 px-[50px] lg:px-[580px] absolute top-[5%] lg:top-[10%] z-30 ">
+          <div className="p-[10px] border-[2px] rounded-[20px] backdrop-blur-lg">
+            <h3 className="text-[30px] font-semibold text-black">
+              Search Results
+            </h3>
+            <div className="grid grid-cols-3 gap-4 mt-4 lg:grid-cols-6 lg:gap-4">
+              {searchResults.slice(0, 6).map((movie: any) => (
                 <div
                   key={movie.id}
                   className="flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
@@ -176,12 +173,12 @@ export const Header = () => {
                     <img
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       alt={movie.original_title}
-                      className="rounded-md w-full h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
+                      className="rounded-md w-[100%] lg:w-full h-[125px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
                     />
                   )}
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
                   <div className="w-full p-[10px] relative z-10">
-                    <h2 className="text-lg mt-2 text-center text-white font-semibold">
+                    <h2 className="text-[13px] lg:text-lg mt-2 text-center text-white font-semibold">
                       {movie.original_title}
                     </h2>
                   </div>

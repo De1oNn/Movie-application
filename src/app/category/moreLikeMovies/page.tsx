@@ -89,7 +89,7 @@ const MoviesPage = () => {
   };
 
   return (
-    <div className='p-[32px] lg:px-[580px]'>
+    <div className='p-[32px] lg:px-[480px]'>
       <div className='my-[20px]'>
         <h1 className='text-[40px] font-semibold'>More like this</h1>
       </div>
@@ -100,7 +100,7 @@ const MoviesPage = () => {
         similarMovies.slice(0, 20).map((similarMovie) => (
           <div
             key={similarMovie.id}
-            className="lg:w-[190px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
+            className="lg:w-[100%] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
             onClick={() => router.push(`/detailsm/${similarMovie.id}`)}
           >
             {similarMovie.poster_path && (

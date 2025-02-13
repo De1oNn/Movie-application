@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+// import { Actor } from "next/font/google";
 import { StepForward } from "lucide-react";
 
 const Page = () => {
@@ -109,7 +110,7 @@ const Page = () => {
   const getMovieCrews = async () => {
     try {
       const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/${id}/credits?language=en-US`,
+        `${TMDB_BASE_URL}/tv/${id}/credits?language=en-US`,
         {
           headers: {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
@@ -133,7 +134,7 @@ const Page = () => {
   const getMovieData = async () => {
     try {
       const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/${id}?language=en-US`,
+        `${TMDB_BASE_URL}/tv/${id}?language=en-US`,
         {
           headers: {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
@@ -150,7 +151,7 @@ const Page = () => {
   const getMoreLike = async () => {
     try {
       const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/${id}/similar?language=en-US&page=1`,
+        `${TMDB_BASE_URL}/tv/${id}/similar?language=en-US&page=1`,
         {
           headers: {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
@@ -163,7 +164,7 @@ const Page = () => {
       console.log("error:", err);
     }
   };
-  console.log(`URL: ${TMDB_BASE_URL}/movie/${id}/similar?language=en-US`);
+  console.log(`URL: ${TMDB_BASE_URL}/tv/${id}/similar?language=en-US`);
 
   useEffect(() => {
     if (id) {
