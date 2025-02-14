@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MoonStar } from "lucide-react";
+// import { MoonStar } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -28,8 +28,8 @@ export const Header = () => {
 
   const router = useRouter();
   const [genres, setGenres] = useState<Genre[]>([]);
-  const [searchValue, setSearchValue] = useState<string>(""); // Track search query
-  const [searchResults, setSearchResults] = useState<any[]>([]); // Store movie search results
+  const [searchValue, setSearchValue] = useState<string>(""); 
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
   const handleHomeClick = () => {
     router.push("/");

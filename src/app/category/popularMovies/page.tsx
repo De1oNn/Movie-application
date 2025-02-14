@@ -145,7 +145,9 @@ const Page = () => {
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+              onClick={() =>
+                setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+              }
             />
           </PaginationItem>
 
@@ -173,7 +175,9 @@ const Page = () => {
             <PaginationNext
               href="#"
               onClick={() =>
-                setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)
+                setCurrentPage(
+                  currentPage < totalPages ? currentPage + 1 : totalPages
+                )
               }
             />
           </PaginationItem>
