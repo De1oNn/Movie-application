@@ -139,7 +139,7 @@ export const Header = () => {
             </DropdownMenu>
           )}
           <input
-            className="w-[100%] lg:w-[410px] rounded-[px] pt-[4px] pb-[4px] pl-[20px] bg-[white] h-[100%]"
+            className="w-[100%] h-[25px] lg:h-[36px] pl:[4px] lg:pl-[8px] lg:w-[410px] rounded-[7px] bg-[white] h-[100%]"
             placeholder="Search movies"
             value={searchValue}
             onChange={handleSearchInputChange}

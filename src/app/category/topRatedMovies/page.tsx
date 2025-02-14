@@ -82,7 +82,7 @@ const Page = () => {
   };
 
   return (
-    <div className='px-[32px] lg:px-[580px]'>
+    <div className='px-[32px] lg:px-[480px]'>
   {topRatedMovies.length > 0 && (
   <div className="flex mt-6 w-[100%] lg:w-[1280px]">
     <div className="w-[100%]">
