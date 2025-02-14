@@ -11,10 +11,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  // CarouselNext,
-  // CarouselPrevious,
 } from "@/components/ui/carousel";
-// import Image from "next/image";
+import Image from "next/image";
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
@@ -66,72 +64,13 @@ const BigUpComingMovie = () => {
                 <CardContent className="relative p-0">
                   {/* Movie Poster */}
                   {movie.backdrop_path ? (
-                    <img
+                    <Image
                       src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                       alt={movie.title}
                       className="w-full h-[800px] object-cover cursor-pointer"
                       onClick={() => router.push(`/detailsm/${movie.id}`)}
                       height={800}
                       width={800}
-                    />
-                  ) : (
-                    <div className="flex h-[800px] items-center justify-center bg-gray-800 text-white">
-                      No Image Available
-                    </div>
-                  )}
-
-                  {/* Movie Details */}
-                  <div className="absolute top-[25%] left-[10%] text-white p-4 w-[325px] rounded-lg">
-                    <h4 className="text-[14px]">Upcoming Movie:</h4>
-                    <h3 className="text-[24px] font-bold">{movie.title}</h3>
-                    <div className="flex items-center mt-2">
-                      <svg
-                        width="28"
-                        height="28"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z"
-                          fill="#FDE047"
-                          stroke="#FDE047"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      {movie.vote_average}/10
-                      <div className="flex ml-[15px]">
-                        <Calendar className="h-[20px] w-[20px]" />
-                        {movie.release_date}
-                      </div>
-                    </div>
-                    <p className="line-clamp-5 text-[14px] mt-[16px]">
-                      {movie.overview}
-                    </p>
-                    <button className="py-[8px] px-[16px] bg-[#262626] text-white rounded-[10px] mt-[16px] flex items-center justify-center">
-                      <Play className="text-white h-[15px] w-[15px]" />
-                      Watch Trailer
-                    </button>
-                  </div>
-                </CardContent>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-      <Carousel className="w-full block lg:hidden" plugins={[plugin.current]}>
-        <CarouselContent className="flex">
-          {upcomingMovies.slice(0, 10).map((movie) => (
-            <CarouselItem key={movie.id} className="h-[600px] w-full">
-              <div className="h-full w-full">
-                <CardContent className="relative p-0">
-                  {/* Movie Poster */}
-                  {movie.backdrop_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-[800px] object-cover cursor-pointer"
-                      onClick={() => router.push(`/detailsm/${movie.id}`)}
                     />
                   ) : (
                     <div className="flex h-[800px] items-center justify-center bg-gray-800 text-white">
