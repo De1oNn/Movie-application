@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-// import { MoonStar } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -18,19 +17,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
-const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
-const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
+const TMDB_BASE_URL =
+  process.env.TMDB_BASE_URL || "https://api.themoviedb.org/3";
+const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN || "";
 
 export const Header = () => {
   type Genre = {
     id: number;
     name: string;
   };
+  type Movie = {
+    id: number;
+    poster_path: string;
+    original_title: string;
+  };
 
   const router = useRouter();
   const [genres, setGenres] = useState<Genre[]>([]);
-  const [searchValue, setSearchValue] = useState<string>(""); 
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Movie[]>([]); // ✅ Fixed state type
 
   const handleHomeClick = () => {
     router.push("/");
@@ -42,12 +47,11 @@ export const Header = () => {
 
   const getGenreData = async () => {
     try {
+      if (!TMDB_BASE_URL || !TMDB_API_TOKEN) return;
       const response = await axios.get(
         `${TMDB_BASE_URL}/genre/movie/list?language=en`,
         {
-          headers: {
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
+          headers: { Authorization: `Bearer ${TMDB_API_TOKEN}` },
         }
       );
       setGenres(response.data.genres);
@@ -60,8 +64,8 @@ export const Header = () => {
     setSearchValue(e.target.value);
   };
 
-  const performSearch = async () => {
-    if (searchValue.trim()) {
+  const performSearch = useCallback(async () => {
+    if (searchValue.trim() && TMDB_BASE_URL && TMDB_API_TOKEN) {
       try {
         const response = await axios.get(
           `${TMDB_BASE_URL}/search/movie?query=${searchValue}&language=en-US&page=1`,
@@ -78,7 +82,7 @@ export const Header = () => {
     } else {
       setSearchResults([]);
     }
-  };
+  }, [searchValue]); // ✅ Memoized function
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -86,7 +90,7 @@ export const Header = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchValue]);
+  }, [searchValue, performSearch]); // ✅ Added performSearch
 
   useEffect(() => {
     getGenreData();
@@ -146,17 +150,8 @@ export const Header = () => {
             onChange={handleSearchInputChange}
           />
         </div>
-        <div className="h-[36px] flex justify-center items-center justify-between text-[black]">
-          <button>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </button>
-        </div>
       </div>
 
-      {/* Display search results below */}
       {searchResults.length > 0 && (
         <div className="mt-4 px-[50px] lg:px-[580px] absolute top-[5%] lg:top-[10%] z-30 ">
           <div className="p-[10px] border-[2px] rounded-[20px] backdrop-blur-lg">
@@ -164,27 +159,18 @@ export const Header = () => {
               Search Results
             </h3>
             <div className="grid grid-cols-3 gap-4 mt-4 lg:grid-cols-6 lg:gap-4">
-              {searchResults.slice(0, 6).map((movie: any) => (
+              {searchResults.slice(0, 6).map((movie) => (
                 <div
                   key={movie.id}
-                  className="flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
-                  onClick={() => router.push(`/detailsm/${movie.id}`)} // Navigate to movie details page
+                  onClick={() => router.push(`/detailsm/${movie.id}`)}
                 >
-                  {movie.poster_path && (
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.original_title}
-                      className="rounded-md w-[100%] lg:w-full h-[125px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
-                      height={800}
-                      width={800}
-                    />
-                  )}
-                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
-                  <div className="w-full p-[10px] relative z-10">
-                    <h2 className="text-[13px] lg:text-lg mt-2 text-center text-white font-semibold">
-                      {movie.original_title}
-                    </h2>
-                  </div>
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.original_title}
+                    height={800}
+                    width={800}
+                  />
+                  <h2>{movie.original_title}</h2>
                 </div>
               ))}
             </div>
