@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { StepForward } from "lucide-react";
+import Image from "next/image";
 
 const Page = () => {
   const params = useParams();
@@ -262,15 +263,19 @@ const Page = () => {
 
           {/* Poster and Backdrop Images */}
           <div className="flex justify-between mb-8 space-y-4 md:space-y-0 relative">
-            <img
+            <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
               className="h-[150px] w-[100px] lg:h-[428px] lg:w-[288px] object-cover rounded-md shadow-md"
+              height={800}
+              width={800}
             />
-            <img
+            <Image
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
               className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
+              height={800}
+              width={800}            
             />
           </div>
 
@@ -381,18 +386,22 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            <img
+            <Image
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
               className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
+              height={800}
+              width={800}       
             />
 
             {/* Poster and Backdrop Images */}
             <div className="flex p-[30px] justify-between">
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
                 className="h-[150px] w-[100px] lg:h-[428px] lg:w-[288px] object-cover rounded-md shadow-md"
+                height={800}
+                width={800}              
               />
               <div className="flex flex-col w-[250px]">
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -481,10 +490,12 @@ const Page = () => {
                   onClick={() => router.push(`/detailsm/${similarMovie.id}`)}
                 >
                   {similarMovie.poster_path && (
-                    <img
+                    <Image
                       src={`https://image.tmdb.org/t/p/w500${similarMovie.poster_path}`}
                       alt={similarMovie.title}
                       className="rounded-md w-[100%] h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
+                      height={800}
+                      width={800}                    
                     />
                   )}
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>

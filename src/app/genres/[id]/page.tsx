@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
 const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
@@ -135,10 +136,12 @@ const Page = () => {
             onClick={() => router.push(`/detailsm/${movie.id}`)}
           >
             {movie.poster_path && (
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.original_title}
                 className="rounded-md w-full h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
+                height={800}
+                width={800}            
               />
             )}
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
