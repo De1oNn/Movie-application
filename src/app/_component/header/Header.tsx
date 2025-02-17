@@ -90,7 +90,7 @@ export const Header = () => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchValue, performSearch]); // ✅ Added performSearch
+  }, [searchValue, performSearch]); // ✅ Added performSearch 
 
   useEffect(() => {
     getGenreData();
@@ -150,6 +150,10 @@ export const Header = () => {
             onChange={handleSearchInputChange}
           />
         </div>
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       </div>
 
       {searchResults.length > 0 && (
