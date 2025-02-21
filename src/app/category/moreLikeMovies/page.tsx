@@ -35,31 +35,30 @@ const MoviesPage = () => {
   const [totalPages, setTotalPages] = useState<number>(1); // Add a loading state
 
   // Function to fetch movies based on genre (similar movies)
-  const getSimilarMoviesByGenre = async (page: number) => {
-    try {
-      setLoading(true); // Set loading to true when API request starts
-      const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/${genresId}/similar?language=en-US&page=${page}`, // Example: Action genre (ID: 28)
-        {
-          headers: {
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        }
-      );
-      console.log("API Response:", response.data); // Log the API response to inspect its structure
-      setSimilarMovies(response.data.results);
-      setTotalPages(response.data.total_pages); // Set the response data to state
-    } catch (err) {
-      console.error("Error fetching movies:", err);
-    } finally {
-      setLoading(false); // Set loading to false when API request finishes
-    }
-  };
-
-  // Fetch similar movies by genre on component mount
   useEffect(() => {
+    const getSimilarMoviesByGenre = async (page: number) => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${TMDB_BASE_URL}/movie/${genresId}/similar?language=en-US&page=${page}`,
+          {
+            headers: {
+              Authorization: `Bearer ${TMDB_API_TOKEN}`,
+            },
+          }
+        );
+        console.log("API Response:", response.data);
+        setSimilarMovies(response.data.results);
+        setTotalPages(response.data.total_pages);
+      } catch (err) {
+        console.error("Error fetching movies:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     getSimilarMoviesByGenre(currentPage);
-  }, [currentPage]); // Empty dependency array means this runs only once when the component mounts
+  }, [currentPage, genresId]); // Only depends on currentPage and genresId // Empty dependency array means this runs only once when the component mounts
 
   if (loading) {
     return <p>Loading...</p>; // Show loading message while data is being fetched

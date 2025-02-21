@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { StepForward } from "lucide-react";
@@ -32,6 +32,8 @@ const Page = () => {
   };
 
   type Movie = {
+    job: string;
+    name: string;
     id: number;
     title: string;
     overview: string;
@@ -62,6 +64,10 @@ const Page = () => {
   type movieCast = {
     profile_path: string;
   };
+  interface Video {
+    key: string;
+    type: string;
+  }
 
   const [movie, setMovie] = useState<Movie>();
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
@@ -72,7 +78,7 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const type = "tv | movie";
 
-  const getMovieTrailer = async () => {
+  const getMovieTrailer = useCallback(async () => {
     try {
       const response = await axios.get(
         `${TMDB_BASE_URL}/${type}/${id}/videos?language=en-US`,
@@ -84,7 +90,7 @@ const Page = () => {
       );
 
       const trailerVideo = response.data.results.find(
-        (video: any) => video.type === "Trailer"
+        (video: Video) => video.type === "Trailer"
       );
 
       if (trailerVideo) {
@@ -96,18 +102,18 @@ const Page = () => {
     } catch (err) {
       console.log("Error fetching trailer", err);
     }
-  };
+  }, [id, type, TMDB_BASE_URL, TMDB_API_TOKEN]);
 
   useEffect(() => {
     if (id) {
       getMovieTrailer();
     }
-  }, [id]);
+  }, [id, getMovieTrailer]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const getMovieCrews = async () => {
+  const getMovieCrews = useCallback(async () => {
     try {
       const response = await axios.get(
         `${TMDB_BASE_URL}/movie/${id}/credits?language=en-US`,
@@ -125,13 +131,13 @@ const Page = () => {
     } catch (err) {
       console.log("Error fetching movie credits", err);
     }
-  };
+  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); // Include all dependencies
 
   useEffect(() => {
     getMovieCrews();
-  }, [id]);
+  }, [getMovieCrews]); //
 
-  const getMovieData = async () => {
+  const getMovieData = useCallback(async () => {
     try {
       const response = await axios.get(
         `${TMDB_BASE_URL}/movie/${id}?language=en-US`,
@@ -146,9 +152,9 @@ const Page = () => {
     } catch (err) {
       console.error("Error:", err);
     }
-  };
+  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); // Include all dependencies
 
-  const getMoreLike = async () => {
+  const getMoreLike = useCallback(async () => {
     try {
       const response = await axios.get(
         `${TMDB_BASE_URL}/movie/${id}/similar?language=en-US&page=1`,
@@ -163,7 +169,8 @@ const Page = () => {
     } catch (err) {
       console.log("error:", err);
     }
-  };
+  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); // Include all dependencies
+
   console.log(`URL: ${TMDB_BASE_URL}/movie/${id}/similar?language=en-US`);
 
   useEffect(() => {
@@ -171,7 +178,7 @@ const Page = () => {
       getMovieData();
       getMoreLike();
     }
-  }, [id]);
+  }, [id, getMovieData, getMoreLike]); //
 
   return (
     <div className="flex flex-col items-center justify-center w-full lg:px-[580px] relative">
@@ -275,7 +282,7 @@ const Page = () => {
               alt={movie.title}
               className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
               height={800}
-              width={800}            
+              width={800}
             />
           </div>
 
@@ -391,7 +398,7 @@ const Page = () => {
               alt={movie.title}
               className="h-[210px] w-[375px] lg:h-[428px] lg:w-[760px] max-w-4xl object-cover rounded-md shadow-md"
               height={800}
-              width={800}       
+              width={800}
             />
 
             {/* Poster and Backdrop Images */}
@@ -401,7 +408,7 @@ const Page = () => {
                 alt={movie.title}
                 className="h-[150px] w-[100px] lg:h-[428px] lg:w-[288px] object-cover rounded-md shadow-md"
                 height={800}
-                width={800}              
+                width={800}
               />
               <div className="flex flex-col w-[250px]">
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -495,7 +502,7 @@ const Page = () => {
                       alt={similarMovie.title}
                       className="rounded-md w-[100%] h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
                       height={800}
-                      width={800}                    
+                      width={800}
                     />
                   )}
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import {
@@ -34,26 +34,26 @@ const Page = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const router = useRouter();
 
-  const getTopRatedMovieData = async () => {
-    try {
-      const response = await axios.get(
-        `${TMDB_BASE_URL}/movie/top_rated?language=en-US&page=${currentPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        }
-      );
-      setTopRatedMovies(response.data.results);
-      setTotalPages(response.data.total_pages);
-    } catch (err) {
-      console.error("Error:", err);
-    }
-  };
+const getTopRatedMovieData = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/movie/top_rated?language=en-US&page=${currentPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TMDB_API_TOKEN}`,
+        },
+      }
+    );
+    setTopRatedMovies(response.data.results);
+    setTotalPages(response.data.total_pages);
+  } catch (err) {
+    console.error("Error:", err);
+  }
+}, [currentPage]); // Include `currentPage` as a dependency
 
-  useEffect(() => {
-    getTopRatedMovieData();
-  }, [currentPage]);
+useEffect(() => {
+  getTopRatedMovieData();
+}, [getTopRatedMovieData]); 
 
   const getPaginationRange = () => {
     const range: number[] = [];
