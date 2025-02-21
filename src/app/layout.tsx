@@ -5,6 +5,7 @@ import { Header } from "./_component/header/Header";
 import { Footer } from "./_component/footer/Footer";
 import { Comment } from "./_component/comment/Comment";
 import { Suspense } from "react";
+import Skeleton from "./_component/Skeleton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense>
+        <Suspense fallback={<Skeleton height="200px" width="100%" />}>
           <Header />
           {children}
           <Comment />
