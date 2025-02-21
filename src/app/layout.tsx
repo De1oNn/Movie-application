@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "./_component/header/Header";
 import { Footer } from "./_component/footer/Footer";
 import { Comment } from "./_component/comment/Comment";
-
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 const apiKey = process.env.NEXT_PUBLIC_MOVIEDB_API_KEY;
 const baseUrl = process.env.TMDB_BASE_URL;
 
-console.log('hello');
+console.log("hello");
 
 console.log(`API Key: ${apiKey}, Base URL: ${baseUrl}`);
 
@@ -35,11 +35,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header/>
-        {children}
-        <Comment/>
-        <Footer/>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Suspense>
+          <Header />
+          {children}
+          <Comment />
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );
