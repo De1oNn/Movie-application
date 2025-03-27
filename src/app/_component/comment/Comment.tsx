@@ -1,62 +1,125 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion"; // For animations
 
 export const Comment = () => {
-  // State to hold the current input value and the list of comments
   const [comment, setComment] = useState("");
   const [commentsList, setCommentsList] = useState<string[]>([]);
+  const maxLength = 200; // Maximum characters for a comment
 
-  // Handle change in the textarea
+  // Load comments from localStorage on mount
+  useEffect(() => {
+    const storedComments = localStorage.getItem("comments");
+    if (storedComments) {
+      setCommentsList(JSON.parse(storedComments));
+    }
+  }, []);
+
+  // Save comments to localStorage whenever commentsList changes
+  useEffect(() => {
+    localStorage.setItem("comments", JSON.stringify(commentsList));
+  }, [commentsList]);
+
+  // Handle textarea input change
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
-  };
-
-  // Handle the comment submission
-  const handleCommentSubmit = () => {
-    if (comment.trim() !== "") {
-      setCommentsList([...commentsList, comment]); // Add comment to the list
-      setComment(""); // Clear input field
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setComment(value);
     }
   };
 
+  // Handle comment submission
+  const handleCommentSubmit = () => {
+    if (comment.trim() !== "") {
+      setCommentsList((prev) => [...prev, comment]);
+      setComment("");
+    }
+  };
+
+  // Clear all comments
+  const handleClearComments = () => {
+    setCommentsList([]);
+    localStorage.removeItem("comments");
+  };
+
   return (
-    <div className="min-h-[150px] w-[100%] p-[20px] flex justify-center items-center">
-      <div className="h-[100%] w-[100%] lg:w-[1280px] rounded-[20px] border-[3px] p-[10px]">
-        <div>
-          <p className="text-[#064ba4] font-semibold">Comment</p>
-        </div>
-        <div className="flex justify-between mt-[10px]">
-          <Textarea
-            className="w-[85%] h-[60px] border-[2px] rounded-[10px] p-[10px]"
-            placeholder="Comment"
-            value={comment}
-            onChange={handleCommentChange}
-          />
-          <div className="flex justify-center items-center h-[80px] w-[40px]">
-            <button
-              className="h-[50%] w-[100%] border-[4px] rounded-[10px] bg-[#0480c7] border-[#064ba4] text-[white] flex justify-center items-center"
-              onClick={handleCommentSubmit}
-            >
-              <Plus />
-            </button>
+    <div className="bg-gradient-to-br from-gray-100 via-blue-50 to-gray-200 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
+      >
+        {/* Header */}
+        <h2 className="text-2xl font-bold text-blue-600 mb-4">Comments Hub</h2>
+
+        {/* Comment Input Section */}
+        <div className="flex items-center space-x-4 mb-6">
+          <div className="flex-1 relative">
+            <Textarea
+              className="w-full h-20 border-2 border-blue-300 rounded-lg p-3 text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 resize-none"
+              placeholder="Share your thoughts..."
+              value={comment}
+              onChange={handleCommentChange}
+            />
+            <span className="absolute bottom-2 right-2 text-xs text-gray-500">
+              {comment.length}/{maxLength}
+            </span>
           </div>
+          <button
+            onClick={handleCommentSubmit}
+            disabled={!comment.trim() || comment.length > maxLength}
+            className="h-12 w-12 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 disabled:bg-gray-400 transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            <Plus className="h-6 w-6" />
+          </button>
         </div>
 
-        {/* Displaying the list of comments */}
-        <div className="mt-[20px]">
-          <p className="text-[#064ba4] font-semibold">Comments</p>
-          <ul className="mt-[10px]">
-            {commentsList.map((comment, index) => (
-              <li key={index} className="border-b-[1px] border-[#ddd] p-[5px]">
-                {comment}
-              </li>
-            ))}
-          </ul>
+        {/* Comments List Section */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-blue-600">
+              Recent Comments ({commentsList.length})
+            </h3>
+            {commentsList.length > 0 && (
+              <button
+                onClick={handleClearComments}
+                className="flex items-center space-x-1 text-red-500 hover:text-red-600 transition-colors duration-300"
+              >
+                <Trash2 className="h-4 w-4" />
+                <span className="text-sm">Clear All</span>
+              </button>
+            )}
+          </div>
+
+          {/* Comments List with Animation */}
+          <AnimatePresence>
+            {commentsList.length === 0 ? (
+              <p className="text-gray-500 text-center">
+                No comments yet. Be the first!
+              </p>
+            ) : (
+              <ul className="space-y-3 max-h-96 overflow-y-auto">
+                {commentsList.map((comment, index) => (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-800 shadow-sm hover:shadow-md transition-shadow duration-300"
+                  >
+                    {comment}
+                  </motion.li>
+                ))}
+              </ul>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

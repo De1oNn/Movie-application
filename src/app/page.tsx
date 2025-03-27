@@ -19,7 +19,6 @@ const Page = () => {
       <UpComingMovie />
       <PopularMovie />
       <TopRatedMovie />
-      {/* <TvShow/> */}
       <button
         className="bg-green-500 text-white px-4 py-2 rounded-md mt-4 absolute z-40 fixed bottom-[5%] left-[5%] sticky"
         onClick={handleHomeClick}
