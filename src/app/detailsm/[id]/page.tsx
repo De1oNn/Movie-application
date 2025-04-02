@@ -190,16 +190,13 @@ const Page = () => {
           <StepForward />
         </button>
 
-        {/* Modal to show trailer */}
         {isModalOpen && (
           <>
-            {/* Dark Overlay */}
             <div
               className="fixed inset-0 bg-black opacity-60 z-10"
-              onClick={closeModal} // Close on overlay click
+              onClick={closeModal} 
             ></div>
 
-            {/* Trailer Modal */}
             <div className="fixed inset-0 flex items-center justify-center z-20">
               <div className="bg-white rounded-lg shadow-lg p-4 w-3/4 sm:w-1/2">
                 <button
@@ -228,7 +225,6 @@ const Page = () => {
       </div>
       {movie ? (
         <div className="w-full max-w-6xl hidden lg:block">
-          {/* Title and Rating Section */}
           <div className="flex w-full justify-between mt-8 mb-6">
             <div>
               <h1 className="text-4xl font-bold">{movie.title}</h1>

@@ -62,7 +62,6 @@ const BigUpComingMovie = () => {
             <CarouselItem key={movie.id} className="h-[800px] w-full">
               <div className="h-full w-full">
                 <CardContent className="relative p-0">
-                  {/* Movie Poster */}
                   {movie.backdrop_path ? (
                     <Image
                       src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
@@ -78,7 +77,6 @@ const BigUpComingMovie = () => {
                     </div>
                   )}
 
-                  {/* Movie Details */}
                   <div className="absolute top-[25%] left-[10%] text-white p-4 w-[325px] rounded-lg">
                     <h4 className="text-[14px]">Upcoming Movie:</h4>
                     <h3 className="text-[24px] font-bold">{movie.title}</h3>
