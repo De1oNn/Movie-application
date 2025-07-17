@@ -78,112 +78,106 @@ const Page = () => {
     return range;
   };
   return (
-    <div className="px-[32px] lg:px-[480px]">
-      {upcomingMovies.length > 0 && (
-        <div className="flex mt-6 w-[100%] lg:w-[1280px]">
-          <div className="w-[100%]">
-            <div className="w-full flex justify-between items-center h-[36px]">
-              <h1 className="text-[24px] font-semibold">Upcoming Movies</h1>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4 lg:grid-cols-5 lg:gap-8 w-[100%]">
-              {upcomingMovies.slice(0, 20).map((movie) => (
-                <div
-                  key={movie.id}
-                  className="lg:w-[230px] flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-[1.05] hover:shadow-xl relative overflow-hidden"
-                  onClick={() => router.push(`/detailsm/${movie.id}`)}
-                >
-                  {movie.poster_path && (
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="rounded-md w-[100%] h-[225px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
-                      height={800}
-                      width={800}
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    {upcomingMovies.length > 0 && (
+      <div className="flex flex-col items-center mt-6">
+        <h1 className="text-2xl sm:text-3xl font-semibold mb-4 text-center">
+          Upcoming Movies
+        </h1>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8 w-full">
+          {upcomingMovies.slice(0, 20).map((movie) => (
+            <div
+              key={movie.id}
+              className="w-full flex flex-col items-center border-2 border-transparent rounded-xl bg-gradient-to-r from-blue-400 to-purple-600 cursor-pointer transition-transform hover:scale-105 hover:shadow-xl relative overflow-hidden"
+              onClick={() => router.push(`/detailsm/${movie.id}`)}
+            >
+              {movie.poster_path && (
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="rounded-md w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[340px] object-cover transition duration-500 ease-in-out transform hover:scale-110"
+                  height={800}
+                  width={800}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black opacity-50 transition duration-300" />
+              <div className="w-full p-4 relative z-10">
+                <div className="flex items-center text-yellow-400 space-x-2 mb-2">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z"
+                      fill="#FDE047"
+                      stroke="#FDE047"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
-                  )}
-                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-black opacity-50 transition duration-300"></div>
-                  <div className="w-[100%] p-[10px] relative z-10">
-                    <div className="px-[20px] flex mt-[5px] flex justify-start">
-                      <span className="flex justify-center items-center text-yellow-400">
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 28 28"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M14.0007 2.33325L17.6057 9.63659L25.6673 10.8149L19.834 16.4966L21.2107 24.5233L14.0007 20.7316L6.79065 24.5233L8.16732 16.4966L2.33398 10.8149L10.3957 9.63659L14.0007 2.33325Z"
-                            fill="#FDE047"
-                            stroke="#FDE047"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <span className="text-[14px] ml-[5px] text-white">
-                        {movie.vote_average}
-                        <span className="text-[12px]">/10</span>
-                      </span>
-                    </div>
-                    <h2 className="text-lg mt-2 text-center text-white font-semibold">
-                      {movie.title}
-                    </h2>
-                    <div className="line-clamp-3 text-[14px] text-white font-extralight mt-2">
-                      {movie.overview || "No overview available"}
-                    </div>
-                  </div>
+                  </svg>
+                  <span className="text-white text-sm">
+                    {movie.vote_average}
+                    <span className="text-xs">/10</span>
+                  </span>
                 </div>
-              ))}
+                <h2 className="text-base md:text-lg text-center text-white font-semibold truncate">
+                  {movie.title}
+                </h2>
+                <p className="line-clamp-3 text-sm text-white font-light mt-1">
+                  {movie.overview || "No overview available"}
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-      <Pagination className="flex justify-end items-end mt-[20px]">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={() =>
-                setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
-              }
-            />
-          </PaginationItem>
-
-          {/* Show page numbers with ellipses */}
-          {getPaginationRange().map((page) => (
-            <PaginationItem key={page}>
-              <PaginationLink
-                href="#"
-                isActive={currentPage === page}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
           ))}
+        </div>
+      </div>
+    )}
+    <Pagination className="flex justify-center items-center mt-10">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={() =>
+              setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+            }
+          />
+        </PaginationItem>
 
-          {/* Show ellipses if there are more pages */}
-          {totalPages > 5 && currentPage + 2 < totalPages && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-
-          <PaginationItem>
-            <PaginationNext
+        {getPaginationRange().map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
               href="#"
-              onClick={() =>
-                setCurrentPage(
-                  currentPage < totalPages ? currentPage + 1 : totalPages
-                )
-              }
-            />
+              isActive={currentPage === page}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </PaginationLink>
           </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </div>
-  );
-};
+        ))}
 
+        {totalPages > 5 && currentPage + 2 < totalPages && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={() =>
+              setCurrentPage(
+                currentPage < totalPages ? currentPage + 1 : totalPages
+              )
+            }
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  </div>
+);
+};
 export default Page;

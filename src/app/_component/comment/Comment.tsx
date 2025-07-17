@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"; // For animations
+import { motion, AnimatePresence } from "framer-motion"; 
 
 export const Comment = () => {
   const [comment, setComment] = useState("");
   const [commentsList, setCommentsList] = useState<string[]>([]);
-  const maxLength = 200; // Maximum characters for a comment
+  const maxLength = 200; 
 
-  // Load comments from localStorage on mount
   useEffect(() => {
     const storedComments = localStorage.getItem("comments");
     if (storedComments) {
@@ -18,12 +17,10 @@ export const Comment = () => {
     }
   }, []);
 
-  // Save comments to localStorage whenever commentsList changes
   useEffect(() => {
     localStorage.setItem("comments", JSON.stringify(commentsList));
   }, [commentsList]);
 
-  // Handle textarea input change
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= maxLength) {
@@ -31,15 +28,12 @@ export const Comment = () => {
     }
   };
 
-  // Handle comment submission
   const handleCommentSubmit = () => {
     if (comment.trim() !== "") {
       setCommentsList((prev) => [...prev, comment]);
       setComment("");
     }
   };
-
-  // Clear all comments
   const handleClearComments = () => {
     setCommentsList([]);
     localStorage.removeItem("comments");
@@ -53,10 +47,8 @@ export const Comment = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
       >
-        {/* Header */}
         <h2 className="text-2xl font-bold text-blue-600 mb-4">Comments Hub</h2>
 
-        {/* Comment Input Section */}
         <div className="flex items-center space-x-4 mb-6">
           <div className="flex-1 relative">
             <Textarea
@@ -78,7 +70,6 @@ export const Comment = () => {
           </button>
         </div>
 
-        {/* Comments List Section */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold text-blue-600">
@@ -95,7 +86,6 @@ export const Comment = () => {
             )}
           </div>
 
-          {/* Comments List with Animation */}
           <AnimatePresence>
             {commentsList.length === 0 ? (
               <p className="text-gray-500 text-center">

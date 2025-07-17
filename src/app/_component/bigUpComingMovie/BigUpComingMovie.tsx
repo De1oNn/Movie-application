@@ -41,7 +41,7 @@ const BigUpComingMovie = () => {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
           },
         }
-      );
+      );      
       setUpcomingMovies(response.data.results);
     } catch (err) {
       console.error("Error:", err);
