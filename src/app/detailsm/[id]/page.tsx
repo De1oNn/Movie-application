@@ -14,6 +14,8 @@ const Page = () => {
   const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
   const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
 
+  // const type = "movie"
+
   type Genre = {
     id: number;
     name: string;
@@ -76,33 +78,33 @@ const Page = () => {
   const [movieCast, setMovieCast] = useState<Movie[]>([]);
   const [trailer, setTrailer] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const type = "tv | movie";
+  const type = "movie";
 
-  const getMovieTrailer = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `${TMDB_BASE_URL}/${type}/${id}/videos?language=en-US`,
-        {
-          headers: {
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        }
-      );
-
-      const trailerVideo = response.data.results.find(
-        (video: Video) => video.type === "Trailer"
-      );
-
-      if (trailerVideo) {
-        setTrailer(trailerVideo.key);
-      } else {
-        console.log("No trailer found.");
-        setTrailer(null);
+const getMovieTrailer = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/${type}/${id}/videos?language=en-US`,
+      {
+        headers: {
+          Authorization: `Bearer ${TMDB_API_TOKEN}`,
+        },
       }
-    } catch (err) {
-      console.log("Error fetching trailer", err);
+    );
+
+    const trailerVideo = response.data.results.find(
+      (video: Video) => video.type === "Trailer"
+    );
+    console.log("Trailer Video:", trailerVideo);
+
+    if (trailerVideo) {
+      setTrailer(trailerVideo.key);
+    } else {
+      setTrailer(null);
     }
-  }, [id, type, TMDB_BASE_URL, TMDB_API_TOKEN]);
+  } catch (err) {
+    console.log("Error fetching trailer", err);
+  }
+}, [id, type, TMDB_BASE_URL, TMDB_API_TOKEN]);
 
   useEffect(() => {
     if (id) {
@@ -127,7 +129,6 @@ const Page = () => {
       setMovieCrew(response.data.crew);
       setMovieCast(response.data.cast);
 
-      console.log("Crew:", response.data.crew);
     } catch (err) {
       console.log("Error fetching movie credits", err);
     }
@@ -135,7 +136,7 @@ const Page = () => {
 
   useEffect(() => {
     getMovieCrews();
-  }, [getMovieCrews]); //
+  }, [getMovieCrews]); 
 
   const getMovieData = useCallback(async () => {
     try {
@@ -152,7 +153,7 @@ const Page = () => {
     } catch (err) {
       console.error("Error:", err);
     }
-  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); // Include all dependencies
+  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); 
 
   const getMoreLike = useCallback(async () => {
     try {
@@ -169,7 +170,7 @@ const Page = () => {
     } catch (err) {
       console.log("error:", err);
     }
-  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); // Include all dependencies
+  }, [id, TMDB_BASE_URL, TMDB_API_TOKEN]); 
 
   console.log(`URL: ${TMDB_BASE_URL}/movie/${id}/similar?language=en-US`);
 
@@ -178,51 +179,11 @@ const Page = () => {
       getMovieData();
       getMoreLike();
     }
-  }, [id, getMovieData, getMoreLike]); //
+  }, [id, getMovieData, getMoreLike]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full lg:px-[580px] relative">
-      <div className="">
-        <button
-          onClick={openModal}
-          className="absolute bg-white text-black border rounded-full h-[40px] w-[40px] flex justify-center items-center top-[500px] right-[1280px] z-10"
-        >
-          <StepForward />
-        </button>
+    <div className="flex flex-col items-center justify-center w-full  relative">
 
-        {isModalOpen && (
-          <>
-            <div
-              className="fixed inset-0 bg-black opacity-60 z-10"
-              onClick={closeModal} 
-            ></div>
-
-            <div className="fixed inset-0 flex items-center justify-center z-20">
-              <div className="bg-white rounded-lg shadow-lg p-4 w-3/4 sm:w-1/2">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-[70px] right-[40px] text-white bg-black rounded-full h-[50px] w-[50px] p-1"
-                >
-                  X
-                </button>
-                {trailer ? (
-                  <iframe
-                    width="100%"
-                    height="550"
-                    src={`https://www.youtube.com/embed/${trailer}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title="Movie Trailer"
-                  ></iframe>
-                ) : (
-                  <p>No trailer available</p>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-      </div>
       {movie ? (
         <div className="w-full max-w-6xl hidden lg:block">
           <div className="flex w-full justify-between mt-8 mb-6">
@@ -273,6 +234,7 @@ const Page = () => {
               height={800}
               width={800}
             />
+            <div className="relative">
             <Image
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
@@ -280,6 +242,48 @@ const Page = () => {
               height={800}
               width={800}
             />
+                  <div className="absolute bottom-3 left-3 flex">
+                    <button
+                      onClick={openModal}
+                      className="bg-white text-black border rounded-full h-[40px] w-[40px] flex justify-center items-center top-[500px] right-[1280px] z-10"
+                    >
+                      <StepForward />
+                    </button>
+
+                    {isModalOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 bg-black opacity-60 z-10"
+                          onClick={closeModal} 
+                        ></div>
+
+                        <div className="fixed inset-0 flex items-center justify-center z-20">
+                          <div className="bg-white rounded-lg shadow-lg p-4 w-3/4 sm:w-1/2">
+                            <button
+                              onClick={closeModal}
+                              className="absolute top-[70px] right-[40px] text-white bg-black rounded-full h-[50px] w-[50px] p-1"
+                            >
+                              X
+                            </button>
+                            {trailer ? (
+                              <iframe
+                                width="100%"
+                                height="550"
+                                src={`https://www.youtube.com/embed/${trailer}`}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title="Movie Trailer"
+                              ></iframe>
+                            ) : (
+                              <p>No trailer available</p>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+            </div>
           </div>
 
           <div className="hidden lg:block flex flex-wrap gap-2 mb-6">

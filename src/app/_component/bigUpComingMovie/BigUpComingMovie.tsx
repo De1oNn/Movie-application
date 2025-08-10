@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CardContent } from "@/components/ui/card";
-import { Play, Calendar } from "lucide-react";
+import { Calendar, StepForward } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -25,12 +24,24 @@ export type Movie = {
   poster_path: string;
   vote_average: number;
   vote_count: number;
-  release_date: number;
+  release_date: string;
 };
+
+interface Video {
+  key: string;
+  type: string;
+  site: string;
+  official: boolean;
+  name: string;
+}
 
 const BigUpComingMovie = () => {
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+  const [trailer, setTrailer] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const router = useRouter();
+  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
 
   const getUpcomingMovieData = async () => {
     try {
@@ -41,18 +52,55 @@ const BigUpComingMovie = () => {
             Authorization: `Bearer ${TMDB_API_TOKEN}`,
           },
         }
-      );      
+      );
       setUpcomingMovies(response.data.results);
     } catch (err) {
       console.error("Error:", err);
     }
   };
 
+  const getMovieTrailer = useCallback(async (movieId: number) => {
+    try {
+      const response = await axios.get(
+        `${TMDB_BASE_URL}/movie/${movieId}/videos?language=en-US`,
+        {
+          headers: {
+            Authorization: `Bearer ${TMDB_API_TOKEN}`,
+          },
+        }
+      );
+
+      const trailerVideo = response.data.results.find(
+        (video: Video) =>
+          video.type === "Trailer" &&
+          video.site === "YouTube" &&
+          video.official
+      ) || response.data.results.find(
+        (video: Video) => video.type === "Trailer" && video.site === "YouTube"
+      );
+
+      setTrailer(trailerVideo?.key || null);
+    } catch (err) {
+      setTrailer(null);
+      console.log("Error fetching trailer", err);
+    }
+  }, []);
+
   useEffect(() => {
     getUpcomingMovieData();
   }, []);
 
-  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
+  const openModal = async (movie: Movie) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+    await getMovieTrailer(movie.id);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTrailer(null);
+    setSelectedMovie(null);
+  };
 
   return (
     <div>
@@ -104,10 +152,15 @@ const BigUpComingMovie = () => {
                     <p className="line-clamp-5 text-[14px] mt-[16px]">
                       {movie.overview}
                     </p>
-                    <button className="py-[8px] px-[16px] bg-[#262626] text-white rounded-[10px] mt-[16px] flex items-center justify-center">
-                      <Play className="text-white h-[15px] w-[15px]" />
-                      Watch Trailer
-                    </button>
+                    <div className="bottom-3 left-3 flex">
+                      <button
+                        onClick={() => openModal(movie)}
+                        className="bg-white text-black border rounded-full h-[44px] w-[140px] flex justify-center items-center z-10 font-semibold shadow-lg hover:bg-gray-200 transition-all"
+                      >
+                        <StepForward className="mr-2" />
+                        Watch Trailer
+                      </button>
+                    </div>
                   </div>
                 </CardContent>
               </div>
@@ -115,7 +168,42 @@ const BigUpComingMovie = () => {
           ))}
         </CarouselContent>
       </Carousel>
+
+      {/* Trailer Modal */}
+      {isModalOpen && selectedMovie && (
+        <>
+          <div
+            className="fixed inset-0 bg-black opacity-70 z-40"
+            onClick={closeModal}
+          ></div>
+          <div className="fixed inset-0 z-50 flex justify-center items-center">
+            <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-3xl relative">
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 flex items-center justify-center"
+              >
+                ×
+              </button>
+              {trailer ? (
+                <iframe
+                  width="100%"
+                  height="400"
+                  src={`https://www.youtube.com/embed/${trailer}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Movie Trailer"
+                  className="rounded-lg"
+                ></iframe>
+              ) : (
+                <p className="text-center text-black">No trailer available</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
+
 export default BigUpComingMovie;

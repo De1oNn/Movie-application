@@ -34,7 +34,7 @@ export const Footer = () => {
                         </div>
                     </div>
                 </div>
-                <div className='w-[25%] flex justify-between flex-col text-[white]'>
+                <div className='flex justify-between flex-col text-[white]'>
                     <p className='font-semibold'>Follow us</p>
                     <p className='font-semibold'>Facebook</p>
                     <p className='font-semibold'>Instagram</p>
